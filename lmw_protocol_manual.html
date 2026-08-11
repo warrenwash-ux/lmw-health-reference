@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LMW Cleanse & Protocol Manual</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#FFFCF0; --panel:#FFFFFF; --panel-2:#FFF4D6;
+    --ink:#17233A; --dim:#6B7385;
+    --science:#00A99D; --science-bg:#D3F5F0;
+    --trad:#FF8A1E; --trad-bg:#FFE7C7;
+    --caution:#E4483B; --caution-bg:#FDE1DE;
+    --dose:#2E86DE; --dose-bg:#D8E9FC;
+    --line:#EFE6C8;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0; background:var(--bg); color:var(--ink); font-family:'Inter',sans-serif; line-height:1.6;}
+  h1,h2,h3,h4{font-family:'Fraunces',serif; font-weight:600; margin:0 0 0.5rem;}
+  .wrap{max-width:760px; margin:0 auto; padding:0 1.25rem 4rem;}
+
+  header{padding:2.2rem 0 1rem; text-align:center;}
+  .eyebrow{font-family:'IBM Plex Mono',monospace; font-size:0.7rem; letter-spacing:0.14em; text-transform:uppercase; color:var(--trad);}
+  header h1{font-size:clamp(1.7rem,6vw,2.3rem); margin-top:0.3rem;}
+  header p{color:var(--dim); max-width:52ch; margin:0.6rem auto 0;}
+
+  .disclaimer{
+    margin:1.3rem 0; border-left:4px solid var(--caution); background:var(--caution-bg);
+    padding:0.8rem 1rem; border-radius:0 8px 8px 0; font-size:0.87rem; color:#7A2620;
+  }
+  .disclaimer b{color:#5C1712;}
+
+  nav.toc{
+    background:var(--panel); border:2px solid var(--line); border-radius:12px;
+    padding:1rem 1.2rem; margin:1.5rem 0; box-shadow:0 2px 12px rgba(23,35,58,0.05);
+  }
+  nav.toc h3{font-size:0.95rem; margin-bottom:0.6rem; color:var(--dim); text-transform:uppercase; letter-spacing:0.05em; font-family:'IBM Plex Mono',monospace; font-weight:500;}
+  nav.toc ol{margin:0; padding-left:1.2rem; columns:1;}
+  nav.toc li{margin-bottom:0.35rem;}
+  nav.toc a{color:var(--ink); text-decoration:none; font-size:0.92rem;}
+  nav.toc a:hover{color:var(--trad);}
+
+  section{margin:3rem 0;}
+  section > h2{
+    font-size:1.5rem; padding-bottom:0.5rem; border-bottom:3px solid var(--trad);
+    display:inline-block; margin-bottom:1.2rem;
+  }
+  section.science-section > h2{border-bottom-color:var(--science);}
+
+  .practitioner-tag{
+    display:inline-block; font-family:'IBM Plex Mono',monospace; font-size:0.65rem;
+    letter-spacing:0.06em; text-transform:uppercase; color:#fff; background:var(--trad);
+    padding:0.2rem 0.55rem; border-radius:20px; margin-bottom:0.7rem; font-weight:600;
+  }
+  .practitioner-tag.science{background:var(--science);}
+
+  h3.protocol-name{font-size:1.15rem; margin-top:1.8rem; color:var(--ink);}
+  h4{font-size:0.98rem; margin-top:1.1rem; color:var(--dim); text-transform:uppercase; letter-spacing:0.03em; font-family:'IBM Plex Mono',monospace; font-weight:500;}
+
+  p{margin:0.5rem 0;}
+  ul, ol{padding-left:1.3rem;}
+  li{margin-bottom:0.3rem;}
+
+  .dose-box{
+    background:var(--dose-bg); border-left:4px solid var(--dose); border-radius:0 8px 8px 0;
+    padding:0.7rem 1rem; margin:0.7rem 0; font-size:0.92rem;
+  }
+  .dose-box b{color:var(--dose);}
+
+  .avoid-box{
+    background:var(--caution-bg); border-left:4px solid var(--caution); border-radius:0 8px 8px 0;
+    padding:0.7rem 1rem; margin:0.7rem 0; font-size:0.9rem;
+  }
+  .avoid-box b{color:var(--caution);}
+
+  .caution-note{
+    font-size:0.82rem; color:#7A2620; font-style:italic; margin-top:0.5rem;
+    border-top:1px dashed var(--caution); padding-top:0.5rem;
+  }
+
+  table{width:100%; border-collapse:collapse; margin:0.8rem 0; font-size:0.87rem;}
+  th, td{text-align:left; padding:0.5rem 0.6rem; border-bottom:1px solid var(--line);}
+  th{font-family:'IBM Plex Mono',monospace; font-size:0.7rem; text-transform:uppercase; letter-spacing:0.04em; color:var(--dim);}
+  tr:nth-child(even){background:var(--panel-2);}
+
+  .card{background:var(--panel); border:2px solid var(--line); border-radius:12px; padding:1.1rem 1.3rem; margin-bottom:1.2rem; box-shadow:0 2px 12px rgba(23,35,58,0.04);}
+
+  .enema-type{border-left:4px solid var(--trad); padding-left:0.9rem; margin:1rem 0;}
+  .enema-type h4{margin-top:0; color:var(--trad);}
+
+  .top-link{display:block; text-align:right; font-size:0.75rem; margin-top:0.5rem;}
+  .top-link a{color:var(--dim); text-decoration:none; font-family:'IBM Plex Mono',monospace;}
+
+  footer{text-align:center; padding:2.5rem 0 1rem; color:var(--dim); font-family:'IBM Plex Mono',monospace; font-size:0.68rem;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="eyebrow">LMW Academy · Personal Reference</div>
+  <h1>The Cleanse & Protocol Manual</h1>
+  <p>What causes it, what to avoid, and the exact protocol — dosages, durations, and step-by-step instructions, pulled directly from each practitioner's own writing.</p>
+</header>
+
+<div class="disclaimer">
+  <b>Read this first.</b> Every dosage and duration on this page is what a given author wrote in their own book, not a verified medical protocol. Several of these practices (extended fasting, colon irrigation, high-dose herbs, heavy metal detox) carry real risk if done incorrectly or without medical supervision — several of the authors say so themselves, and those cautions are quoted here, not softened. Talk to a physician before starting anything below, especially if you're managing a diagnosed condition, pregnant, on medication, or have a chronic illness.
+</div>
+
+<nav class="toc">
+  <h3>Jump to a section</h3>
+  <ol>
+    <li><a href="#causes">What Causes Disease — 4 Root-Cause Frameworks</a></li>
+    <li><a href="#avoid">What to Avoid</a></li>
+    <li><a href="#habits">Daily Habits — Diet, Exercise, Breath, Sun</a></li>
+    <li><a href="#organ-formulas">Organ-by-Organ Herbal Formulas (Morse)</a></li>
+    <li><a href="#jensen-cleanse">Jensen's Seven-Day Cleansing Program</a></li>
+    <li><a href="#liver-flush">Liver & Gallbladder Flush</a></li>
+    <li><a href="#castor">Castor Oil Packs</a></li>
+    <li><a href="#cold-sheet">The Cold Sheet Treatment</a></li>
+    <li><a href="#kidney-cleanse">Kidney Cleanse</a></li>
+    <li><a href="#parasite">Parasite Cleanse</a></li>
+    <li><a href="#heavy-metal">30-Day Heavy Metal Detox</a></li>
+    <li><a href="#sebi-10day">Sebi's 10-Day Herb Rotation</a></li>
+    <li><a href="#liver-detox-stages">Sebi's 7-Day Liver Detox Stages</a></li>
+    <li><a href="#essiac">Essiac Tea — Formula & Dosage</a></li>
+    <li><a href="#enemas">Enema Guide — 9 Types</a></li>
+  </ol>
+</nav>
+
+<!-- ============ CAUSES ============ -->
+<section id="causes">
+  <h2>What Causes Disease</h2>
+  <p>Four different practitioners, four different explanations for the same underlying question. None of these are medically established — they're each author's core theory, in their own words, condensed.</p>
+
+  <div class="card">
+    <span class="practitioner-tag">Robert Morse</span>
+    <h3 class="protocol-name">The Three Root Causes</h3>
+    <p><b>1. Inherent weakness</b> — genetic "memory" from your parents determines which organs are constitutionally weaker and break down first.</p>
+    <p><b>2. Toxicity</b> — mucus (especially from dairy), chemical residue, and heavy metals build up in tissue and block normal function. Morse frames colds, flu, and most GI issues as the body's own purging effort, not a distinct disease.</p>
+    <p><b>3. Overacidity (acidosis)</b> — most modern diets (meat, grains, pasteurized dairy, eggs, cooked tomatoes) are acid-forming. Morse frames most "-itis" conditions (gastritis, colitis, cystitis, arthritis) as inflammatory responses to acidosis, not independent diseases. Correction = alkalize the body.</p>
+  </div>
+
+  <div class="card">
+    <span class="practitioner-tag">Bernard Jensen</span>
+    <h3 class="protocol-name">The Neural-Arc Reflex</h3>
+    <p>Because the embryonic gut tube and nervous system form together early in development, and internal organs bud outward from that same tube, each organ stays neurologically linked to the section of bowel it originated from. Toxic buildup in a bowel zone "reflexes" (via nerve pathways) to the organ that budded from it — causing symptoms in a body part that can be physically remote from the bowel. Practical implication: treat the bowel first, even for a problem that seems to be somewhere else entirely.</p>
+  </div>
+
+  <div class="card">
+    <span class="practitioner-tag">Dr. Sebi</span>
+    <h3 class="protocol-name">Alkaline / "Electric Body" Theory</h3>
+    <p>Disease is attributed to acidity and mucus buildup, which is said to let bacteria and viruses thrive. The corrective action is keeping the body alkaline through an approved list of plant foods and herbs — mucus is treated as the mechanism, acidity as the root condition.</p>
+  </div>
+
+  <div class="card">
+    <span class="practitioner-tag">Arnold Ehret</span>
+    <h3 class="protocol-name">The Formula of Life: V = P − O</h3>
+    <p>Vitality equals Power minus Obstruction. "Obstruction" is mucus and toxemia from wrong diet, blocking circulation and organ function. Ehret's single-disease theory: there is fundamentally only ONE disease — internal uncleanliness. Named conditions (influenza, pneumonia, nephritis) are reframed as the body's own elimination effort focused on a specific organ. When elimination is repeatedly suppressed rather than supported, the condition becomes "chronic."</p>
+    <div class="caution-note">Ehret's system predates modern physiology by roughly a century and is not supported by mainstream medicine. Presented here as historical context for why the later practitioners in this collection share overlapping language.</div>
+  </div>
+  <div class="top-link"><a href="#top">↑ back to top</a></div>
+</section>
+
+<!-- ============ AVOID ============ -->
+<section id="avoid">
+  <h2>What to Avoid</h2>
+
+  <div class="card">
+    <span class="practitioner-tag">Dr. Sebi</span>
+    <h4>Not permitted, ever, on the diet</h4>
+    <div class="avoid-box">
+      Any canned product · seedless fruit (e.g. seedless grapes) · eggs · all dairy · fish · poultry · red meat · soy products · processed food · restaurant/delivery food · hybrid or fortified foods · wheat · white sugar · alcohol · yeast and yeast products · baking powder · microwaved food
+    </div>
+  </div>
+
+  <div class="card">
+    <span class="practitioner-tag">Robert Morse</span>
+    <h4>Acid-forming, per his framework</h4>
+    <p>Meat, grains, pasteurized dairy, eggs, cooked tomatoes — the standard modern diet, essentially. Morse's reasoning: acid-forming food creates inflammation, which the liver counters by raising cholesterol, and minerals begin "bonding" into stones (gallbladder, kidney, bone spurs).</p>
+  </div>
+
+  <div class="card">
+    <span class="practitioner-tag">Cherie & John Calbom</span>
+    <h4>During liver detox specifically</h4>
+    <div class="avoid-box">
+      Alcohol, drugs, caffeine, nicotine, fried foods, meats, cheese, margarine, hydrogenated oils, aspartame. <b>Grapefruit specifically avoided</b> during active liver cleansing — naringin in grapefruit inhibits the CYP3A liver enzymes the cleanse is trying to activate.
+    </div>
+  </div>
+
+  <div class="card">
+    <span class="practitioner-tag">Cherie & John Calbom</span>
+    <h4>During parasite cleanse specifically</h4>
+    <div class="avoid-box">
+      No sugar, no sweets, no artificial sweeteners, no fruit — parasites are said to feed on sugar. Also limit/avoid beans, lentils, split peas, nuts, seeds (unless sprouted) and gluten grains (wheat, rye, oats, spelt, barley) during this cleanse specifically, and avoid all iced drinks (said to contract the intestines and hold in toxins).
+    </div>
+  </div>
+  <div class="top-link"><a href="#top">↑ back to top</a></div>
+</section>
+
+<!-- ============ HABITS ============ -->
+<section id="habits">
+  <h2>Daily Habits — Diet, Exercise, Breath, Sun</h2>
+  <p><span class="practitioner-tag">Robert Morse</span> His "Nine Healthy Habits," in his own structure:</p>
+
+  <h4>Exercise</h4>
+  <p>Walking, swimming, rebounding, tai chi, stretching, yoga, or passive aerobic exercise — movement drives blood and lymph flow, especially in the lower body. If you're weak, build slowly, but increase activity every day.</p>
+
+  <h4>Deep Breathing</h4>
+  <p>Lie on your back. Place a hand on your abdomen just above the navel. Breathe in through the nose without moving your shoulders — the abdomen should rise first. Once the lower lobes are full, keep inhaling to fill the upper chest, raising the shoulders. Exhale gently through the mouth. Practiced regularly, this is meant to alkalize the body and increase cellular oxygen use.</p>
+
+  <h4>Sun (Color Therapy)</h4>
+  <div class="dose-box"><b>Morse's explicit caution:</b> "The sun is acidic in nature, and too much is just as bad as not enough." Balanced exposure, not maximal exposure, is the guidance — the more alkaline your body, the better you tolerate sun without burning.</div>
+
+  <h4>Dry Skin Brushing</h4>
+  <p>Long-handled vegetable-fiber brush (not nylon). Brush feet, legs, and hands first, moving toward the center of the body. Do before a morning shower.</p>
+
+  <h4>Saunas / Steam Baths</h4>
+  <p>Sweating is framed as a "third kidney" — a major daily elimination route. If no sauna access, a hot bath with mustard, cayenne, or other herbs added to the water is offered as a substitute.</p>
+
+  <h4>Slant Boarding</h4>
+  <p>Lying head-down at a 45° angle to improve cerebral circulation and lymphatic flow in the legs — countering the effects of gravity from a lifetime of being upright.</p>
+
+  <h4>Foot & Hand Reflexology</h4>
+  <p>Rubbing the soles of the feet and palms of the hands daily to break up acid-crystal buildup at nerve endings that Morse says "reflex" to related organs.</p>
+
+  <h4>Meditation</h4>
+  <p>30 minutes, same time daily if possible. Ten deep breaths to start, then progressive relaxation from the toes upward.</p>
+  <div class="top-link"><a href="#top">↑ back to top</a></div>
+</section>
+
+<!-- ============ ORGAN FORMULAS ============ -->
+<section id="organ-formulas">
+  <h2>Organ-by-Organ Herbal Formulas</h2>
+  <p><span class="practitioner-tag">Robert Morse</span> 14 full formulas from <i>The Detox Miracle Sourcebook</i> — herbs, what each is indicated for, exact suggested dosage, and his own stated cautions.</p>
+
+  <div class="card">
+    <h3 class="protocol-name">Adrenal Glands</h3>
+    <p><b>Herbs:</b> Astragalus root, licorice root, parsley root, bayberry root bark, Jamaican sarsaparilla root, juniper berries, kelp fronds, alfalfa leaf, prickly ash bark, parsley leaf, Siberian ginseng root.</p>
+    <div class="dose-box"><b>General:</b> 1 full dropper, 3–6× daily. <b>Acute:</b> 1 full dropper every 4 hours.</div>
+    <div class="caution-note">May temporarily elevate blood pressure — monitor if you have hypertension.</div>
+  </div>
+
+  <div class="card">
+    <h3 class="protocol-name">Blood</h3>
+    <p><b>Herbs:</b> Red clover herb & flowers, yellow dock root, burdock root, plantain herb, white oak bark, prickly ash bark.</p>
+    <div class="dose-box"><b>General:</b> 1 full dropper, 3–6× daily. <b>Acute:</b> every 2–4 hours.</div>
+  </div>
+
+  <div class="card">
+    <h3 class="protocol-name">Brain & Nervous System</h3>
+    <p><b>Herbs:</b> Gotu kola, Siberian ginseng root, ginkgo leaf, schizandra berries, skullcap herb, prickly ash bark, calamus root.</p>
+    <div class="dose-box"><b>General:</b> 1 full dropper, 3–6× daily. <b>Acute:</b> every 2–4 hours.</div>
+    <p style="font-size:0.85rem; color:var(--dim);">Best paired with the Circulation and Lymphatic formulas for deeper results, per the source.</p>
+  </div>
+
+  <div class="card">
+    <h3 class="protocol-name">Circulation & Blood Pressure</h3>
+    <p><b>Herbs:</b> Cayenne pepper (40,000 HU max), garlic bulb, alfalfa leaf, butcher's broom root, licorice root, hawthorn berries, aloe (100:1).</p>
+    <div class="dose-box"><b>General:</b> 2 capsules, 3× daily. <b>Acute:</b> 2–3 capsules every 2–4 hours.</div>
+    <div class="caution-note">Caution with low blood pressure. If your iris shows adrenal weakness, an adrenal formula without licorice is preferred instead.</div>
+  </div>
+
+  <div class="card">
+    <h3 class="protocol-name">Female Reproductive System</h3>
+    <p><b>Herbs:</b> Chaste tree berries, true/false unicorn root, saw palmetto berries, wild yam root, red raspberry leaf, black haw bark, prickly ash bark.</p>
+    <div class="dose-box"><b>General:</b> 1 full dropper, 3–6× daily. <b>Acute:</b> every 4 hours. <b>As a douche:</b> 2–3 full droppers in skin-temperature water.</div>
+    <div class="caution-note">Caution during early pregnancy — usage may need to be halved.</div>
+  </div>
+
+  <div class="card">
+    <h3 class="protocol-name">General Nutrition & Energy (super-food blend)</h3>
+    <p><b>Ingredients:</b> Royal jelly, wheat grass, alfalfa, Siberian ginseng root, beet root, cinnamon bark, dandelion leaf, saw palmetto berries, lemon peel, Norwegian kelp, black walnut hull, pau d'arco, chaste tree berries, chickweed, gotu kola, hawthorn berries, milk thistle seed, barley grass, licorice root, ginger root, rye grass, astragalus root, flax seed, aloe 100:1, ginkgo biloba.</p>
+    <table>
+      <tr><th>Body weight</th><th>Dose</th></tr>
+      <tr><td>10–50 lbs</td><td>1/4 heaping tsp</td></tr>
+      <tr><td>50–100 lbs</td><td>1/2 heaping tsp</td></tr>
+      <tr><td>100–200 lbs</td><td>1 heaping tsp</td></tr>
+      <tr><td>200–300 lbs</td><td>1 tablespoon</td></tr>
+    </table>
+    <div class="dose-box">Take 2–3× daily in water or juice, or sprinkled over salad.</div>
+    <div class="caution-note">Don't take before bed — it's an energizer.</div>
+  </div>
+
+  <div class="card">
+    <h3 class="protocol-name">Heart</h3>
+    <p><b>Herbs:</b> Hawthorn berries, butcher's broom root, black walnut hull, dandelion leaf, kelp granules, motherwort herb, lily of the valley herb, cayenne pepper, night blooming cereus stem.</p>
+    <div class="dose-box"><b>General:</b> 1 full dropper, 3–6× daily. <b>Acute:</b> every 2–4 hours.</div>
+    <div class="caution-note">Do not take during pregnancy. Monitor closely if on beta-blockers or calcium channel blockers — heart medications can become too strong and drop blood pressure too low.</div>
+  </div>
+
+  <div class="card">
+    <h3 class="protocol-name">Kidney & Bladder</h3>
+    <p><b>Herbs:</b> Couch grass root, corn silk, pipsissewa leaves, nettle herb, coriander seed, dandelion leaf, lespedeza herb, gravel root.</p>
+    <div class="dose-box"><b>General:</b> 1 full dropper, 3–6× daily. <b>Acute:</b> every 2–4 hours.</div>
+    <div class="caution-note">Do not drink cranberry juice alongside this — Morse considers it too acidic. Watermelon is his preferred alternative.</div>
+  </div>
+
+  <div class="card">
+    <h3 class="protocol-name">Lungs</h3>
+    <p><b>Herbs:</b> Platycodon root, cayenne pepper, mullein leaf, fenugreek seed, pleurisy root, horehound herb, comfrey root & leaf, lobelia herb.</p>
+    <div class="dose-box"><b>General:</b> 1 full dropper, 3–6× daily. <b>Acute:</b> every 1–2 hours.</div>
+    <div class="caution-note">Avoid during early pregnancy.</div>
+  </div>
+
+  <div class="card">
+    <h3 class="protocol-name">Male Reproductive System</h3>
+    <p><b>Herbs:</b> Damiana leaf, false unicorn root, chaste tree berries, saw palmetto berries, Siberian ginseng root.</p>
+    <div class="dose-box"><b>General:</b> 1 full dropper, 3–4× daily.</div>
+    <div class="caution-note">Do not take with prostate cancer without also using a dedicated prostate formula, lymphatic formula, parasite formula, adrenal formula, and blood formula together.</div>
+  </div>
+
+  <div class="card">
+    <h3 class="protocol-name">Parasites — Microorganisms</h3>
+    <p><b>Herbs:</b> Pau d'arco inner bark, thyme leaf, black walnut hulls, butternut bark, echinacea angustifolia root, usnea lichen, grapefruit seed extract, lomatium root.</p>
+    <div class="dose-box"><b>General:</b> 1 full dropper, 3–6× daily. <b>Acute:</b> every 2–4 hours. For heavy Candida infestation: may be used <b>4–6 months</b>.</div>
+    <div class="caution-note">Avoid during early pregnancy.</div>
+  </div>
+
+  <div class="card">
+    <h3 class="protocol-name">Parasites — General Use (larger parasites, worms, flukes)</h3>
+    <p><b>Herbs:</b> Wormwood herb, betel nut, male fern root, wormseed, parsley root & leaf, cloves, pau d'arco bark, pink root, tansy herb & flower, cascara sagrada bark.</p>
+    <div class="dose-box"><b>General:</b> 1 full dropper, 3–6× daily.</div>
+    <div class="caution-note">Do not use during pregnancy.</div>
+  </div>
+
+  <div class="card">
+    <h3 class="protocol-name">Stomach & Bowels</h3>
+    <p><b>Herbs:</b> Cascara sagrada bark, slippery elm bark, white oak bark, wild yam root, plantain leaf, licorice root, barberry root, gentian root, false unicorn root, ginger root.</p>
+    <div class="dose-box"><b>General:</b> 1–6 capsules, 3× daily. Bowels work on 12-hour cycles — start with 2–3 capsules morning and evening. If diarrhea occurs, reduce the dose; the goal is soft stools, not loose ones.</div>
+    <p style="font-size:0.85rem;">Pairs with a Liver/Gallbladder Flush (below) — Morse calls this "very important for everyone."</p>
+  </div>
+
+  <div class="card">
+    <h3 class="protocol-name">Thyroid</h3>
+    <p><b>Herbs:</b> Bladderwrack, fritillary bulb, poke root, mullein leaf, bugleweed herb, bayberry root bark, black walnut hull, Irish moss, cayenne pepper, saw palmetto berries.</p>
+    <div class="dose-box"><b>General:</b> 1 full dropper, 3–6× daily. <b>Acute:</b> every 4 hours.</div>
+  </div>
+  <div class="top-link"><a href="#top">↑ back to top</a></div>
+</section>
+
+<!-- ============ JENSEN 7-DAY ============ -->
+<section id="jensen-cleanse">
+  <h2>Jensen's Seven-Day Cleansing Program</h2>
+  <span class="practitioner-tag">Bernard Jensen</span>
+  <p>Phase 1 of his "Ultimate Tissue Cleansing Program" (full cycle: this phase + a Seven-Week Building Phase, repeated for <b>6–8 months</b>).</p>
+
+  <h4>Daily structure</h4>
+  <ul>
+    <li>Skin brushing (dry, natural bristle, 3–5 min) before the morning bath</li>
+    <li>Cleansing Drink, 5× a day at 3-hour intervals (7am–7pm)</li>
+    <li>Supplements, 4× a day at 3-hour intervals (8:30am–5:30pm)</li>
+    <li>Colema (home colonic irrigation via a colema board), morning and evening</li>
+  </ul>
+
+  <h4>The Cleansing Drink (two parts, taken in succession)</h4>
+  <div class="dose-box">
+    <b>Part one:</b> 8oz water + 2oz apple juice + 1 tbsp bentonite clay water + 1 rounded tsp psyllium-based cleanser.<br><br>
+    <b>Part two:</b> 10oz water + 1 tbsp apple cider vinegar + 1 tsp raw honey.<br><br>
+    Wait 15–20 minutes before/after a colema.
+  </div>
+
+  <h4>Supplements (with Jensen's stated rationale)</h4>
+  <table>
+    <tr><th>Supplement</th><th>Why</th></tr>
+    <tr><td>Alfalfa or chlorella tablets</td><td>Fiber/bulk for bowel tone; chlorella as a strong detoxifier</td></tr>
+    <tr><td>Apple cider vinegar</td><td>High potassium — alkalize and prevent electrolyte loss</td></tr>
+    <tr><td>Liquid calcium-magnesium</td><td>Muscle contraction/relaxation for bowel tone</td></tr>
+    <tr><td>Bentonite clay water</td><td>Claimed to bind/adsorb toxins in the gut</td></tr>
+    <tr><td>Cod liver oil</td><td>Lubrication, stimulates bile, vitamin A/D</td></tr>
+    <tr><td>Digestive enzyme (pancreatin)</td><td>Loosens mucous lining of digestive tract</td></tr>
+    <tr><td>Dulse (kelp)</td><td>Natural iodine for thyroid/metabolism</td></tr>
+    <tr><td>Flaxseed / flaxseed tea</td><td>Bulk-forming, soothing for colitis/inflammation</td></tr>
+    <tr><td>Garlic</td><td>Traditional antiparasitic</td></tr>
+    <tr><td>Herbal laxative (cascara sagrada + aloe)</td><td>One-time bowel emptying before starting — <b>not for regular use</b></td></tr>
+    <tr><td>Liquid chlorophyll</td><td>Natural antibacterial/deodorizing agent</td></tr>
+    <tr><td>Niacin</td><td>Vasodilation ("flush") — <b>start at 25mg, increase gradually</b></td></tr>
+    <tr><td>Vitamin C + bioflavonoids/rutin</td><td>Antioxidant support during detox</td></tr>
+    <tr><td>Wheat germ oil</td><td>Essential fatty acids, vitamin E</td></tr>
+    <tr><td>Whole beet juice concentrate</td><td>Mild laxative, liver-supportive</td></tr>
+  </table>
+
+  <div class="avoid-box">
+    <b>Jensen's own contraindications — read before starting:</b> Consult a physician first, with a full physical exam. Do NOT discontinue prescribed medications — fasting/cleansing can make medications act more strongly, and dosages (especially insulin) may need physician-supervised adjustment. Needs professional supervision for: bowel obstruction, severe inflammatory bowel disease, ulceration, diverticulitis, active bleeding, serious heart conditions, diabetes (especially insulin-dependent), tuberculosis, cancer, asthma.
+  </div>
+  <div class="top-link"><a href="#top">↑ back to top</a></div>
+</section>
+
+<!-- ============ LIVER FLUSH ============ -->
+<section id="liver-flush">
+  <h2>Liver & Gallbladder Flush</h2>
+  <span class="practitioner-tag">Robert Morse</span>
+  <p>Removes what the source calls "liver and gallbladder stones" — most are soft lipid/bile stones, not hard mineral stones.</p>
+
+  <h4>What you need</h4>
+  <ul>
+    <li>8 oz cold-pressed extra virgin olive oil</li>
+    <li>6–8 oz fresh pink grapefruit juice, or juice of 2 lemons</li>
+    <li>Fresh apple juice (enzymes reduce nausea)</li>
+    <li>Optional: Phosfood Liquid to help soften stones</li>
+    <li>Optional: intestinal cleansing formula</li>
+  </ul>
+
+  <h4>Prep, 3 days before</h4>
+  <ul>
+    <li>Raw fruits/vegetables only (organic preferred)</li>
+    <li>8oz fresh apple juice, morning and evening</li>
+    <li>Bowel detox: gentle formula if bowels move daily, moderate if every 2 days, strong if regularity is poor — or a single enema the day before instead</li>
+    <li>Optional: 45 drops Phosfood Liquid in apple juice, 2×/day</li>
+  </ul>
+  <div class="dose-box">No solid food after noon on flush day — juice or distilled water only.</div>
+
+  <h4>The flush itself</h4>
+  <ol>
+    <li>Stop all fluids at 6:30pm</li>
+    <li>Between 7–9pm: mix 8oz olive oil with 6–8oz grapefruit juice (or 2 lemons' juice)</li>
+    <li>Drink it — all at once, or 1/4 cup every 15 minutes, whichever suits you</li>
+    <li>Go to bed immediately after, lying on your right side</li>
+  </ol>
+  <p>Watch stools the next day for stones — usually green, sometimes yellow/red/black, pea-sized to quarter-sized.</p>
+  <div class="caution-note">With any degenerative condition, this flush should be supervised by a health care professional.</div>
+  <div class="top-link"><a href="#top">↑ back to top</a></div>
+</section>
+
+<!-- ============ CASTOR OIL ============ -->
+<section id="castor">
+  <h2>Castor Oil Packs</h2>
+  <span class="practitioner-tag">Robert Morse</span>
+  <p>Used on the abdomen for detox; also for pain, slipped discs, tumors, tinnitus, nausea, inflammation, and swollen organs (spleen, liver, kidneys, lymph nodes, bowels). Especially used for lung issues like asthma.</p>
+
+  <h4>What you need</h4>
+  <ul>
+    <li>Soft flannel cloth (cotton or wool), cut to size (10–12" for the abdomen)</li>
+    <li>Cold-pressed castor oil</li>
+    <li>Wax paper or plastic wrap</li>
+    <li>Heat source (hot water bottle preferred over electric)</li>
+  </ul>
+
+  <h4>Instructions</h4>
+  <ol>
+    <li>Fold cloth to 2–4" thickness, saturate with castor oil</li>
+    <li>Apply directly to skin over the target area</li>
+    <li>Cover with wax paper/plastic wrap</li>
+    <li>Apply heat over that (wrap in a towel if too hot)</li>
+    <li>Leave on at least 1 hour — overnight if needed</li>
+  </ol>
+  <div class="dose-box"><b>Frequency:</b> 3–7 times per week. The flannel can be reused — store in a glass container in the fridge.</div>
+  <div class="top-link"><a href="#top">↑ back to top</a></div>
+</section>
+
+<!-- ============ COLD SHEET ============ -->
+<section id="cold-sheet">
+  <h2>The Cold Sheet Treatment</h2>
+  <span class="practitioner-tag">Robert Morse</span> <span style="font-size:0.8rem; color:var(--dim);">(attributed to Dr. John Christopher / Dr. Richard Schulze)</span>
+  <div class="caution-note">Morse himself does not recommend this in highly debilitated conditions, such as advanced cancer — the risk of over-exhausting someone with very little energy is too high. Requires an assistant.</div>
+
+  <h4>Step 1 — Prep</h4>
+  <p>A few days of raw food beforehand. Optional enema the night of treatment; optionally followed by a garlic implant (8–10 large garlic cloves blended with 50% apple cider vinegar / 50% distilled water, administered via rectal syringe) — described as very strong even for raw fooders.</p>
+
+  <h4>Step 2 — The hot bath</h4>
+  <p>Draw a bath as hot as tolerable. Add 1oz dry mustard powder in a cotton sack, 1oz ground ginger root in another. Optionally add cayenne pepper for intensity (try without pepper first). Coat sensitive areas (genitals, nipples) with petroleum jelly. Soak 10–15 minutes, drinking hot yarrow or ginger tea throughout to sustain sweating.</p>
+  <p>Have an all-white cotton sheet pre-frozen or chilled in ice water, ready for the moment you exit the tub.</p>
+
+  <h4>Step 3 — The cold sheet</h4>
+  <p>Submerge the whole body except the head. On exiting, your assistant wraps you immediately in the frozen sheet — the hot/cold contrast intensifies the drawing action on the skin.</p>
+
+  <h4>Step 4 — Bed</h4>
+  <p>Go straight to bed wrapped in the cold sheet, over waterproofed bedding, with a dry cotton sheet and blanket layered on top. Optional garlic paste on the soles of the feet. In the morning, shower and dry-brush the skin; examine the sheet for released toxins.</p>
+  <div class="top-link"><a href="#top">↑ back to top</a></div>
+</section>
+
+<!-- ============ KIDNEY CLEANSE ============ -->
+<section id="kidney-cleanse">
+  <h2>Kidney Cleanse</h2>
+  <span class="practitioner-tag">Cherie & John Calbom</span>
+  <div class="dose-box"><b>Duration:</b> 3–7 days.</div>
+
+  <h4>Full version</h4>
+  <ul>
+    <li>3-day vegetable juice fast option: four 10oz glasses/day — e.g. carrot-beet-celery, watermelon, asparagus-carrot-cucumber, cucumber-mint</li>
+    <li>Diuretic herbal teas: agrimony, marshmallow, juniper, nettles, buchu</li>
+    <li>Nettles tea specifically for uric acid elimination</li>
+    <li>Minimum 64oz purified water/day (more for higher body weight)</li>
+  </ul>
+
+  <h4>Easy version (7 days)</h4>
+  <div class="dose-box">1 tbsp unsweetened cranberry concentrate in 24oz water with stevia, plus 1–2 cups nettles tea daily, alongside a vegan diet.</div>
+
+  <h4>Kidney stones specifically</h4>
+  <div class="dose-box">1/4 cup parsnip juice + 3/4 cup liquid chlorophyll daily until cleared, followed by an alkaline-forming diet for prevention.</div>
+  <div class="top-link"><a href="#top">↑ back to top</a></div>
+</section>
+
+<!-- ============ PARASITE ============ -->
+<section id="parasite">
+  <h2>Parasite Cleanse</h2>
+  <span class="practitioner-tag">Cherie & John Calbom</span>
+  <p>Run the Complete Intestinal Cleanse for several weeks first — parasites are said to embed in mucous-encrusted intestinal plaque that has to be cleared before this cleanse can reach them.</p>
+
+  <h4>Diet</h4>
+  <p>Follow the Acid-Alkaline Balancing Diet. Emphasize beta-carotene-rich foods (carrots, sweet potato, squash, broccoli, kale, spinach, dandelion greens). Avoid all sugar/sweets/artificial sweeteners/fruit — parasites are said to feed on sugar.</p>
+
+  <h4>Garlic</h4>
+  <div class="dose-box">2 raw garlic cloves/day — mince fine, place on a spoon, swallow with water without chewing.</div>
+
+  <h4>Herb combinations</h4>
+  <table>
+    <tr><th>For</th><th>Herbs</th></tr>
+    <tr><td>Roundworms</td><td>Green/black walnut hulls, wormwood, ground cloves, gentian root, ginger, mandrake root</td></tr>
+    <tr><td>Flatworms (tapes, flukes)</td><td>Male fern, pumpkin seeds, pink root, wood betony, chamomile, senna</td></tr>
+  </table>
+
+  <h4>Enzymes</h4>
+  <p>Bromelain and papain with meals; protease, amylase, lipase between meals — said to break the mucus barrier over parasitic cysts. Grapefruit seed extract cited as effective against protozoa/fungi on contact.</p>
+  <div class="top-link"><a href="#top">↑ back to top</a></div>
+</section>
+
+<!-- ============ HEAVY METAL ============ -->
+<section id="heavy-metal">
+  <h2>30-Day Heavy Metal Detox Program</h2>
+  <span class="practitioner-tag">Cherie & John Calbom</span>
+  <div class="caution-note">Never fast while detoxifying heavy metals — amino acids may be carrying metals, and fasting can break down the protective protein layer, exposing metals and causing damage.</div>
+
+  <h4>Diet</h4>
+  <p>Acid-Alkaline Balancing Diet, plenty of cruciferous vegetables and dark leafy greens, adequate protein (vegan sources or 1–2 protein shakes/day).</p>
+
+  <h4>Daily protocol</h4>
+  <ul>
+    <li>2 glasses carrot juice/day (add celery, cucumber, parsley, greens, ginger, 1/2 green apple, lemon)</li>
+    <li>Cilantro + garlic (said to help remove mercury)</li>
+    <li>8–10 glasses purified water/day</li>
+    <li>1–2 Colon Cleansing Fiber Shakes/day, plus the 7-Day Intestinal Cleanse herbal formulas 1–2×/day</li>
+  </ul>
+  <div class="avoid-box"><b>Do not take enzymes during this cleanse</b> — they can strip the protein that's carrying heavy metals out of the body, exposing tissue to the metal directly.</div>
+
+  <h4>Supplements</h4>
+  <table>
+    <tr><th>Supplement</th><th>Dose</th><th>Timing</th></tr>
+    <tr><td>L-Methionine</td><td>500 mg</td><td>Twice a day, between meals</td></tr>
+    <tr><td>L-Cysteine</td><td>500 mg</td><td>Twice a day, between meals</td></tr>
+    <tr><td>Zinc</td><td>50–100 mg</td><td>Daily, between meals</td></tr>
+    <tr><td>Probiotic formula</td><td>2 capsules</td><td>After each meal</td></tr>
+    <tr><td>Calcium & vitamin C</td><td>—</td><td>With meals</td></tr>
+    <tr><td>Antioxidant formula</td><td>As directed</td><td>Between meals</td></tr>
+  </table>
+  <p style="font-size:0.85rem;">Expect possible cold-like symptoms as metals release — described as the "Herxheimer Reaction," said to be temporary.</p>
+  <div class="top-link"><a href="#top">↑ back to top</a></div>
+</section>
+
+<!-- ============ SEBI 10 DAY ============ -->
+<section id="sebi-10day">
+  <h2>Sebi's 10-Day Herb Rotation</h2>
+  <span class="practitioner-tag">Dr. Sebi</span>
+  <p>One herb in the morning, a different one in the evening, for 10 days:</p>
+  <table>
+    <tr><th>Day</th><th>Morning</th><th>Evening</th></tr>
+    <tr><td>1</td><td>Savory</td><td>Bird pepper of Africa</td></tr>
+    <tr><td>2</td><td>Thyme & dill</td><td>Fresh cayenne</td></tr>
+    <tr><td>3</td><td>Bay leaves</td><td>Sage</td></tr>
+    <tr><td>4</td><td>Sweet basil & basil</td><td>Achiote</td></tr>
+    <tr><td>5</td><td>Tarragon</td><td>Pulverized onion</td></tr>
+    <tr><td>6</td><td>Cloves</td><td>Habanero</td></tr>
+    <tr><td>7</td><td>Oregano</td><td>Sweet sensational savor</td></tr>
+    <tr><td>8</td><td>Pulverized granulated seaweed</td><td>Purified cactus agave syrup</td></tr>
+    <tr><td>9</td><td>Purified sea salt</td><td>Date sugar</td></tr>
+    <tr><td>10</td><td>Kelp</td><td>Nori</td></tr>
+  </table>
+  <div class="dose-box">Alongside this: drink roughly 1 gallon of spring water daily, and take Sebi's mixtures/products 1 hour before any medications.</div>
+  <div class="top-link"><a href="#top">↑ back to top</a></div>
+</section>
+
+<!-- ============ SEBI LIVER STAGES ============ -->
+<section id="liver-detox-stages">
+  <h2>Sebi's 7-Day Liver Detox — Stage by Stage</h2>
+  <span class="practitioner-tag">Dr. Sebi</span>
+  <p>Can run as a 3-day, 7-day, or 21-day program. The 7-day breakdown:</p>
+
+  <h4>Days 1–3</h4>
+  <p>Fluid-only: 10–12 glasses of water daily plus fresh-squeezed lime juice. No dairy. Light exercise permitted to help move toxins.</p>
+
+  <h4>Days 4–6</h4>
+  <p>Fresh fruit, vegetables, and whole grains — celery, apples, carrots, oranges blended into juice; herbal teas (a few cups/day); meals of sliced/boiled vegetables (celery, carrots, broccoli, spinach); soups every few hours.</p>
+
+  <h4>Day 7</h4>
+  <p>Fruits, vegetables, and liquids together, raw or steamed. Rosemary tea and dandelion preparations specifically recommended for this day.</p>
+
+  <div class="caution-note">Source note: stop if you experience pain, sickness, or nausea. Alcohol restriction continues for one full week after finishing.</div>
+  <div class="top-link"><a href="#top">↑ back to top</a></div>
+</section>
+
+<!-- ============ ESSIAC ============ -->
+<section id="essiac">
+  <h2>Essiac Tea — Formula & Dosage</h2>
+  <span class="practitioner-tag">Rene Caisse</span>
+  <div class="caution-note">This formula is historically promoted as a cancer remedy. There is no established clinical evidence it cures cancer — the source book itself only claims people have been "helped," not cured. Presented here as a traditional formula, never as cancer treatment.</div>
+
+  <h4>The four herbs (dry mix ratio)</h4>
+  <table>
+    <tr><th>Herb</th><th>Amount</th></tr>
+    <tr><td>Burdock root, cut</td><td>6.5 cups (52 oz by measure)</td></tr>
+    <tr><td>Sheep sorrel, powder</td><td>16 oz (by weight)</td></tr>
+    <tr><td>Slippery elm bark, powder</td><td>4 oz (by weight)</td></tr>
+    <tr><td>Turkey rhubarb root, powder</td><td>1 oz (by weight)</td></tr>
+  </table>
+
+  <h4>Preparation</h4>
+  <ol>
+    <li>Mix dry ingredients; store unused portion in a cool, dark place</li>
+    <li>Bring water to a rolling boil, lid on</li>
+    <li>Stir in the dry mix, boil covered at reduced heat for 10 minutes</li>
+    <li>Turn off heat, scrape pot sides, stir</li>
+    <li>Sit covered, undisturbed, for 12 hours total (stir once at the 6-hour mark if you like)</li>
+    <li>Reheat to near-boiling — do not boil</li>
+    <li>Strain twice into a clean pot</li>
+    <li>Bottle hot, into sterilized containers, immediately</li>
+  </ol>
+
+  <h4>Dosage</h4>
+  <div class="dose-box">
+    <b>Standard:</b> 2 oz, twice a day, 2 hours before or after eating. Ideally: morning on an empty stomach (wait 2 hours to eat), and at bedtime (2 hours after eating). Can be diluted with equal parts water.<br><br>
+    <b>As a preventative (lower dose):</b> 4 tbsp (2 oz) at bedtime on an empty stomach.
+  </div>
+  <div class="avoid-box">
+    <b>If side effects occur</b> (nausea, digestive discomfort, or a temporary increase in tumor size as the source describes it): stop for several days, then resume at half-ounce doses every other day, gradually increasing back up.
+  </div>
+  <div class="top-link"><a href="#top">↑ back to top</a></div>
+</section>
+
+<!-- ============ ENEMAS ============ -->
+<section id="enemas">
+  <h2>Enema Guide — 9 Types</h2>
+  <span class="practitioner-tag">Llaila Afrika</span>
+  <p>Water (distilled, spring, or boiled) or herbal tea injected into the rectum/colon to remove feces, worms, and impurities. A <b>high enema</b> uses a 24–32" colon tube. A <b>colonic irrigation</b> uses 10–30 gallons of water with an in-flow/out-flow tube setup via a proctor; without that equipment, the source suggests 10 gallons per high enema, done across 3 days instead of all at once. Tube and anus lightly oiled before inserting; water warm, not hot.</p>
+
+  <div class="enema-type">
+    <h4>Emollient — softens hard, caked feces</h4>
+    <p>Barley, linseed oil, prune juice, psyllium, castor oil, olive oil.</p>
+  </div>
+
+  <div class="enema-type">
+    <h4>Nutritive</h4>
+    <div class="dose-box">1–2 cups molasses + 2 cups horseradish + juice of 2 lemons, in 2 quarts of water.</div>
+  </div>
+
+  <div class="enema-type">
+    <h4>Sedative</h4>
+    <p>Cannabis sativa seed tea, valerian, or catnip.</p>
+  </div>
+
+  <div class="enema-type">
+    <h4>Purgative</h4>
+    <p>Liquid soap added to an herbal solution of ginger and horseradish.</p>
+  </div>
+
+  <div class="enema-type">
+    <h4>Anthelmintic — for worms</h4>
+    <p>Source notes worms feed on fermented/putrefied matter from constipation, meat, contaminated dairy, lunch meat, slow digestion, and stress. Can be felt or seen in stool, often crawl out at night due to blanket warmth, and can cause anal itching.</p>
+    <div class="dose-box">Salt water: dissolve 1–2 cups salt in warm water, add lemon, inject into rectum.</div>
+  </div>
+
+  <div class="enema-type">
+    <h4>Coffee & Garlic — deep detox for severe conditions</h4>
+    <p>Garlic acts as an antibiotic; caffeine stimulates colon muscle contraction to push waste out. Solution said to travel up to the gallbladder and stimulate it to release its contents.</p>
+  </div>
+
+  <div class="enema-type">
+    <h4>Diarrhea</h4>
+    <p>Herbs that are laxative and also remove worms: aloe, cascara sagrada, horseradish, senna. To remove worms specifically: asafetida, elecampane, garlic, quassia, wormwood.</p>
+  </div>
+
+  <div class="enema-type">
+    <h4>Antispasmodic — for a colon that won't contract/relax properly</h4>
+    <p>Chamomile, hops, lobelia, valerian.</p>
+  </div>
+
+  <div class="enema-type">
+    <h4>Astringent — for a bleeding colon</h4>
+    <p>Caused by straining from constipation, weak/prolapsed muscle, or poor diet. Ice-cold water enemas suggested, or: comfrey, wild alum root, lobelia, mullein, wild rue, white oak bark.</p>
+  </div>
+
+  <h4>To reduce how often you need one at all</h4>
+  <div class="dose-box">2 tbsp daily of flax seed meal, slippery elm powder, psyllium husk/seed powder, fenugreek, or chia seeds — natural fiber/mucilage, not a laxative, not habit-forming.</div>
+
+  <h4>Checking your own transit time</h4>
+  <p>Eat 5–6 tbsp charcoal powder or tablets, then watch for it in your stool. Food should spend about 4 hours in the stomach and 4 hours in the intestines — total transit under 16 hours. Longer than that suggests an enema plus dietary correction may help.</p>
+  <div class="top-link"><a href="#top">↑ back to top</a></div>
+</section>
+
+<footer>LMW Cleanse & Protocol Manual · science layer + 8 practitioner overlays · educational reference, not medical advice</footer>
+</div>
+</body>
+</html>
