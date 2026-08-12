@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LMW Health Reference — A Field Compendium</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#FFFCF0;
+    --panel:#FFFFFF;
+    --panel-2:#FFF4D6;
+    --parchment:#17233A;
+    --parchment-dim:#6B7385;
+    --science:#00A99D;
+    --science-dim:#D3F5F0;
+    --trad:#FF8A1E;
+    --trad-dim:#FFE7C7;
+    --caution:#E4483B;
+    --line:#EFE6C8;
+  }
+  .rainbow-0{--chip:#E4483B;--chip-bg:#FDE1DE;}
+  .rainbow-1{--chip:#FF8A1E;--chip-bg:#FFE7C7;}
+  .rainbow-2{--chip:#E8B400;--chip-bg:#FBF0C0;}
+  .rainbow-3{--chip:#4CAF50;--chip-bg:#DBF2DC;}
+  .rainbow-4{--chip:#00A99D;--chip-bg:#D3F5F0;}
+  .rainbow-5{--chip:#2E86DE;--chip-bg:#D8E9FC;}
+  .rainbow-6{--chip:#7A5FD3;--chip-bg:#E5DEFA;}
+  .rainbow-7{--chip:#E0559B;--chip-bg:#FBDCEC;}
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--parchment);
+    font-family:'Inter',sans-serif;
+    line-height:1.5;
+  }
+  ::selection{background:var(--trad-dim);color:var(--parchment);}
+
+  header{
+    padding:1.6rem 1.25rem 0;
+  }
+  .toolbar{
+    position:sticky; top:0; z-index:10;
+    background:rgba(255,252,240,0.96);
+    backdrop-filter:blur(6px);
+    padding:0.75rem 1.25rem 0.6rem;
+    border-bottom:2px solid var(--line);
+    margin-top:1.1rem;
+  }
+  .eyebrow{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:0.7rem;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    color:var(--science);
+  }
+  h1{
+    font-family:'Fraunces',serif;
+    font-weight:600;
+    font-size:clamp(1.6rem,6vw,2.4rem);
+    margin:0.3rem 0 0.2rem;
+    letter-spacing:-0.01em;
+  }
+  .sub{color:var(--parchment-dim); font-size:0.92rem; max-width:60ch;}
+
+  .disclaimer{
+    margin-top:1rem;
+    border-left:4px solid var(--caution);
+    padding:0.6rem 0.9rem;
+    background:#FDE1DE;
+    font-size:0.82rem;
+    color:#8C2E26;
+    border-radius:0 8px 8px 0;
+  }
+  .disclaimer b{color:#6B1712;}
+
+  .search-wrap{position:relative;}
+  input[type=search]{
+    width:100%;
+    background:var(--panel);
+    border:2px solid var(--line);
+    color:var(--parchment);
+    padding:0.75rem 1rem;
+    font-family:'Inter',sans-serif;
+    font-size:0.95rem;
+    border-radius:10px;
+    outline:none;
+    box-shadow:0 2px 10px rgba(0,0,0,0.04);
+  }
+  input[type=search]:focus{border-color:var(--science); box-shadow:0 0 0 3px var(--science-dim);}
+  input[type=search]::placeholder{color:var(--parchment-dim);}
+
+  .filters{
+    display:flex; gap:0.4rem; margin-top:0.7rem;
+    overflow-x:auto; flex-wrap:nowrap;
+    padding-bottom:0.3rem;
+    -webkit-overflow-scrolling:touch;
+    scrollbar-width:none;
+  }
+  .filters::-webkit-scrollbar{display:none;}
+  .filter-chip{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:0.68rem;
+    letter-spacing:0.04em;
+    padding:0.4rem 0.75rem;
+    border:2px solid var(--line);
+    border-radius:20px;
+    color:var(--parchment-dim);
+    cursor:pointer;
+    background:#FFFFFF;
+    transition:all .15s ease;
+    white-space:nowrap;
+    font-weight:500;
+  }
+  .filter-chip:hover{border-color:var(--chip, var(--science)); color:var(--chip, var(--science));}
+  .filter-chip.active{
+    background:var(--chip-bg, var(--science-dim));
+    border-color:var(--chip, var(--science));
+    color:var(--chip, var(--science));
+  }
+
+  main{max-width:840px; margin:0 auto; padding:1.25rem;}
+
+  .count-line{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:0.72rem;
+    color:var(--parchment-dim);
+    margin:0.4rem 0 1.1rem;
+    letter-spacing:0.03em;
+  }
+
+  .card{
+    background:var(--panel);
+    border:2px solid var(--line);
+    border-radius:12px;
+    margin-bottom:0.9rem;
+    overflow:hidden;
+    box-shadow:0 2px 12px rgba(23,35,58,0.05);
+    transition:box-shadow .15s ease, border-color .15s ease;
+  }
+  .card:hover{box-shadow:0 4px 18px rgba(23,35,58,0.09); border-color:var(--science-dim);}
+  .card-head{
+    padding:0.95rem 1.1rem 0.8rem;
+    cursor:pointer;
+    display:flex; justify-content:space-between; align-items:flex-start; gap:0.8rem;
+  }
+  .card-head:hover{background:var(--panel-2);}
+  .card-title{
+    font-family:'Fraunces',serif;
+    font-weight:500;
+    font-size:1.12rem;
+    line-height:1.3;
+  }
+  .specimen-label{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:0.66rem;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    color:var(--parchment-dim);
+    margin-top:0.3rem;
+  }
+  .chevron{
+    font-family:'IBM Plex Mono',monospace;
+    color:var(--parchment-dim);
+    font-size:0.9rem;
+    flex-shrink:0;
+    margin-top:0.2rem;
+    transition:transform .15s ease;
+  }
+  .card.open .chevron{transform:rotate(90deg);}
+
+  .card-body{display:none; padding:0 1.1rem 1.1rem;}
+  .card.open .card-body{display:block;}
+
+  .entry{
+    border-left:4px solid var(--line);
+    padding:0.5rem 0.5rem 0.5rem 0.85rem;
+    margin-bottom:0.85rem;
+    border-radius:0 8px 8px 0;
+  }
+  .entry.science{border-left-color:var(--science); background:linear-gradient(90deg, var(--science-dim), transparent 60%);}
+  .entry.practitioner{border-left-color:var(--trad); background:linear-gradient(90deg, var(--trad-dim), transparent 60%);}
+
+  .entry-label{
+    display:flex; align-items:center; gap:0.5rem; margin-bottom:0.25rem;
+    font-family:'IBM Plex Mono',monospace;
+    font-size:0.7rem;
+    letter-spacing:0.05em;
+  }
+  .entry.science .entry-label{color:var(--science);}
+  .entry.practitioner .entry-label{color:var(--trad);}
+  .layer-tag{
+    font-size:0.62rem;
+    padding:0.15rem 0.5rem;
+    border-radius:20px;
+    text-transform:uppercase;
+    letter-spacing:0.06em;
+    font-weight:600;
+  }
+  .entry.science .layer-tag{background:var(--science); color:#FFFFFF;}
+  .entry.practitioner .layer-tag{background:var(--trad); color:#FFFFFF;}
+
+  .entry-text{font-size:0.9rem; color:var(--parchment);}
+  .entry-caution{
+    margin-top:0.35rem;
+    font-size:0.78rem;
+    color:var(--caution);
+    font-style:italic;
+  }
+  .entry-anecdotal{
+    margin-top:0.3rem;
+    font-size:0.72rem;
+    color:var(--parchment-dim);
+    font-family:'IBM Plex Mono',monospace;
+  }
+
+  .empty{
+    text-align:center; padding:3rem 1rem; color:var(--parchment-dim);
+    font-family:'Fraunces',serif; font-size:1.1rem;
+  }
+
+  .section-title{
+    font-family:'Fraunces',serif;
+    font-size:1.3rem;
+    margin:2.2rem 0 0.8rem;
+    padding-top:1.4rem;
+    border-top:2px dashed var(--line);
+    color:var(--trad);
+  }
+
+  .philosophy-card{
+    background:linear-gradient(135deg, #FFFFFF, var(--trad-dim) 200%);
+    border:2px solid var(--line);
+    border-radius:12px;
+    padding:1rem 1.1rem;
+    margin-bottom:0.8rem;
+    box-shadow:0 2px 12px rgba(23,35,58,0.05);
+  }
+  .philosophy-practitioner{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:0.68rem;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    color:var(--trad);
+    font-weight:600;
+  }
+  .philosophy-name{
+    font-family:'Fraunces',serif;
+    font-size:1.05rem;
+    margin:0.25rem 0 0.4rem;
+  }
+  .philosophy-summary{font-size:0.87rem; color:var(--parchment-dim);}
+
+  footer{
+    text-align:center;
+    padding:2.5rem 1rem 3rem;
+    color:var(--parchment-dim);
+    font-family:'IBM Plex Mono',monospace;
+    font-size:0.68rem;
+    letter-spacing:0.04em;
+
+  }
+  .lib-nav{display:flex;gap:0.4rem;justify-content:center;flex-wrap:wrap;margin:0.9rem 0 0;font-family:'IBM Plex Mono',monospace;font-size:0.66rem;}
+  .lib-nav a{color:var(--parchment-dim);text-decoration:none;padding:0.3rem 0.6rem;border:1px solid var(--line);border-radius:20px;white-space:nowrap;}
+  .lib-nav a:hover{border-color:var(--trad);color:var(--trad);}
+  .lib-nav a.current{background:var(--panel-2);color:var(--parchment);font-weight:600;}  }
+
+  @media(max-width:480px){
+    .filters{gap:0.3rem;}
+    .filter-chip{font-size:0.63rem; padding:0.3rem 0.55rem;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="eyebrow">LMW Academy · Personal Reference</div>
+  <h1>A Field Compendium of Body & Herb</h1>
+  <p class="sub">Science-backed findings, pinned alongside what each practitioner taught — labeled by source, not blended into one voice.</p>
+  <div class="disclaimer">
+    <b>Teaching, not treating.</b> This is an educational reference for personal study, not medical advice. Practitioner entries reflect what each source teaches, not verified fact — talk to a physician before acting on anything here, especially the protocols.
+  </div>
+  <nav class="lib-nav">
+    <a href="human_body_foundations.html">📖 Learn the Theory First</a>
+    <a href="lmw_health_reference.html" class="current">🔍 Field Compendium</a>
+    <a href="lmw_body_systems_guide.html">🫀 Body Systems Guide</a>
+    <a href="lmw_protocol_manual.html">🧪 Protocol Manual</a>
+  </nav>
+</header>
+
+<div class="toolbar">
+  <div class="search-wrap">
+    <input type="search" id="searchInput" placeholder="Search a condition, herb, or body system…">
+  </div>
+  <div class="filters" id="filterChips"></div>
+</div>
+
+<main>
+  <div class="count-line" id="countLine"></div>
+  <div id="results"></div>
+
+  <div class="section-title">Core Philosophies</div>
+  <div id="philosophies"></div>
+
+  <footer>LMW Health Reference — built from the personal library · science layer + 8 practitioner overlays</footer>
+</main>
+
+<script>
+const DATA = {"conditions": [{"name": "Lung disease (lung cancer, COPD)", "body_system": "Respiratory", "entries": [{"practitioner": "Michael Greger", "layer": "science", "summary": "Discussed as one of the leading causes of death; chapter covers dietary factors relevant to lung cancer and COPD risk.", "caution": "p.315 (extracted text)", "anecdotal": false}]}, {"name": "Alzheimer's disease", "body_system": "Neurological", "entries": [{"practitioner": "Michael Greger", "layer": "science", "summary": "Framed as preventable though not currently curable; arterial plaque buildup in the brain is implicated, paralleling cardiovascular disease mechanisms. Populations eating traditional plant-based diets show markedly lower rates.", "caution": "extracted text, early pages", "anecdotal": false}]}, {"name": "Digestive cancers (colorectal, pancreatic)", "body_system": "Digestive", "entries": [{"practitioner": "Michael Greger", "layer": "science", "summary": "Colorectal cancer rates far higher in the U.S. than India, with spice and fiber intake (turmeric, legumes, leafy greens) proposed as protective factors. Pancreatic cancer risk linked to animal fat intake in large cohort studies (NIH-AARP, EPIC).", "caution": "p.362", "anecdotal": false}]}, {"name": "Infections (influenza, pneumonia)", "body_system": "Immune", "entries": [{"practitioner": "Michael Greger", "layer": "science", "summary": "Higher fruit/vegetable intake associated with stronger antibody response to pneumonia vaccine in elderly volunteers; cruciferous vegetables and blueberries linked to enhanced immune cell activity.", "caution": "p.393", "anecdotal": false}]}, {"name": "Type 2 diabetes", "body_system": "Endocrine", "entries": [{"practitioner": "Michael Greger", "layer": "science", "summary": "Insulin resistance tied to intramuscular fat buildup. Plant-based diets associated with lower obesity/BMI and substantially reduced diabetes risk in large cohorts; some case reports of insulin discontinuation within weeks on a whole-food plant-based diet (framed with a caution to do this under medical supervision).", "caution": "p.410", "anecdotal": false}, {"practitioner": "Dr. Sebi", "layer": "practitioner", "summary": "Avoid fried foods, sugared teas, rice, lentils; eat kale, cucumber, lettuce, cherry/plum tomatoes, chickpeas, bell peppers, squash, mushrooms, dandelion, onions; fruit limited to red raspberry, plums, apples, seeded key limes; sour soups specifically recommended", "caution": null, "anecdotal": false}]}, {"name": "Hypertension (high blood pressure)", "body_system": "Cardiovascular", "entries": [{"practitioner": "Michael Greger", "layer": "science", "summary": "Whole grains (3 servings/day), hibiscus tea, and flaxseed shown in randomized trials to meaningfully lower blood pressure, comparable to medication effect sizes in some trials.", "caution": "p.446", "anecdotal": false}]}, {"name": "Non-alcoholic fatty liver disease (NAFLD)", "body_system": "Hepatic", "entries": [{"practitioner": "Michael Greger", "layer": "science", "summary": "Linked to soda consumption and processed meat intake; oatmeal shown in a randomized controlled trial to improve liver function and support weight loss.", "caution": "p.470", "anecdotal": false}]}, {"name": "Blood cancers (leukemia, lymphoma, myeloma)", "body_system": "Hematologic", "entries": [{"practitioner": "Michael Greger", "layer": "science", "summary": "Plant-based dietary patterns associated with lower risk across large cohort studies (Iowa Women's Health Study, Mayo Clinic data); attributed to antioxidant content of whole foods rather than supplements.", "caution": "p.544 area", "anecdotal": false}]}, {"name": "Kidney disease", "body_system": "Renal", "entries": [{"practitioner": "Michael Greger", "layer": "science", "summary": "Animal protein, animal fat, and dietary cholesterol associated with declining kidney function in long-term Harvard cohort data; animal protein triggers kidney hyperfiltration within hours of consumption. Plant protein not shown to have the same effect.", "caution": "p.502", "anecdotal": false}]}, {"name": "Suicidal depression", "body_system": "Mental Health", "entries": [{"practitioner": "Michael Greger", "layer": "science", "summary": "Listed among the fifteen leading causes of death addressed in the parent book; dietary/lifestyle risk factors discussed.", "caution": "p.544", "anecdotal": false}]}, {"name": "Prostate cancer", "body_system": "Reproductive", "entries": [{"practitioner": "Michael Greger", "layer": "science", "summary": "Framed as more common than typically recognized; dietary risk/protective factors discussed.", "caution": "p.556", "anecdotal": false}]}, {"name": "Parkinson's disease", "body_system": "Neurological", "entries": [{"practitioner": "Michael Greger", "layer": "science", "summary": "Associated in the text with repetitive head trauma as well as dietary/environmental factors.", "caution": "p.586", "anecdotal": false}]}, {"name": "Breast cancer", "body_system": "Reproductive", "entries": [{"practitioner": "Michael Greger", "layer": "science", "summary": "Grilled/smoked/barbecued meat intake associated with higher risk in postmenopausal women (Long Island Breast Cancer Study Project); elevated cholesterol linked to increased premenopausal risk; higher vegetable intake associated with lower risk of hard-to-treat receptor-negative breast cancer (Black Women's Health Study).", "caution": "p.502-556 range", "anecdotal": false}]}, {"name": "Gallbladder disorders", "body_system": "Digestive", "entries": [{"practitioner": "Bernard Jensen", "layer": "practitioner", "summary": "See practitioner philosophy for framework.", "caution": null, "anecdotal": false}]}, {"name": "Diverticular disease (diverticula, diverticulitis)", "body_system": "Digestive", "entries": [{"practitioner": "Bernard Jensen", "layer": "practitioner", "summary": "See practitioner philosophy for framework.", "caution": null, "anecdotal": false}]}, {"name": "Colitis", "body_system": "Digestive", "entries": [{"practitioner": "Bernard Jensen", "layer": "practitioner", "summary": "See practitioner philosophy for framework.", "caution": null, "anecdotal": false}]}, {"name": "Bowel stricture", "body_system": "Digestive", "entries": [{"practitioner": "Bernard Jensen", "layer": "practitioner", "summary": "See practitioner philosophy for framework.", "caution": null, "anecdotal": false}]}, {"name": "Flatulence", "body_system": "Digestive", "entries": [{"practitioner": "Bernard Jensen", "layer": "practitioner", "summary": "See practitioner philosophy for framework.", "caution": null, "anecdotal": false}]}, {"name": "Ulceration (bowel)", "body_system": "Digestive", "entries": [{"practitioner": "Bernard Jensen", "layer": "practitioner", "summary": "See practitioner philosophy for framework.", "caution": null, "anecdotal": false}]}, {"name": "Bowel spasm", "body_system": "Digestive", "entries": [{"practitioner": "Bernard Jensen", "layer": "practitioner", "summary": "See practitioner philosophy for framework.", "caution": null, "anecdotal": false}]}, {"name": "Adhesions", "body_system": "Digestive", "entries": [{"practitioner": "Bernard Jensen", "layer": "practitioner", "summary": "See practitioner philosophy for framework.", "caution": null, "anecdotal": false}]}, {"name": "Bowel parasites", "body_system": "Digestive", "entries": [{"practitioner": "Bernard Jensen", "layer": "practitioner", "summary": "See practitioner philosophy for framework.", "caution": null, "anecdotal": false}]}, {"name": "Prolapsus (bowel prolapse)", "body_system": "Digestive", "entries": [{"practitioner": "Bernard Jensen", "layer": "practitioner", "summary": "See practitioner philosophy for framework.", "caution": null, "anecdotal": false}]}, {"name": "Colon cancer", "body_system": "Digestive", "entries": [{"practitioner": "Bernard Jensen", "layer": "practitioner", "summary": "See practitioner philosophy for framework.", "caution": null, "anecdotal": false}]}, {"name": "Constipation / chronic 'autointoxication'", "body_system": "Digestive", "entries": [{"practitioner": "Bernard Jensen", "layer": "practitioner", "summary": "See practitioner philosophy for framework.", "caution": null, "anecdotal": false}]}, {"name": "Builds high blood count / provides iron to organs", "body_system": "Hematologic", "entries": [{"practitioner": "Bernard Jensen", "layer": "practitioner", "summary": "Builds high blood count / provides iron to organs", "caution": null, "anecdotal": false}]}, {"name": "Improves anemic conditions", "body_system": "Hematologic", "entries": [{"practitioner": "Bernard Jensen", "layer": "practitioner", "summary": "Case example: pernicious anemia patient given 1 tsp liquid chlorophyll concentrate 8x/day over 3 months, blood count reported to rise from 2,800,000 to 4,500,000", "caution": null, "anecdotal": true}]}, {"name": "Cleans and deodorizes bowel tissue; aids diverticulae/constipation", "body_system": "Digestive", "entries": [{"practitioner": "Bernard Jensen", "layer": "practitioner", "summary": "4-5 alfalfa/chlorophyll tablets per meal typical; up to 10 for more toxic conditions, per Jensen", "caution": null, "anecdotal": false}]}, {"name": "Helps purify the liver; aids hepatitis improvement", "body_system": "Hepatic", "entries": [{"practitioner": "Bernard Jensen", "layer": "practitioner", "summary": "1 tsp liquid chlorophyll in water, 3-8x/day depending on severity per the text", "caution": null, "anecdotal": false}]}, {"name": "Feeds heart tissue iron; used for heart trouble", "body_system": "Cardiovascular", "entries": [{"practitioner": "Bernard Jensen", "layer": "practitioner", "summary": "1 tbsp liquid chlorophyll in water with honey, 3x/day, alongside vitamin E (800-1200 IU/day) per the text", "caution": null, "anecdotal": false}]}, {"name": "Regulates menstruation", "body_system": "Reproductive", "entries": [{"practitioner": "Bernard Jensen", "layer": "practitioner", "summary": "Case example: excessive menstrual bleeding resolved within 4 days using 2-3 tsp liquid chlorophyll in water, 5-6x/day; attributed to chlorophyll's vitamin K content and calcium replenishment", "caution": null, "anecdotal": true}]}, {"name": "Aids hemophilia", "body_system": "Hematologic", "entries": [{"practitioner": "Bernard Jensen", "layer": "practitioner", "summary": "Attributed to vitamin K content (anti-hemorrhagic)", "caution": null, "anecdotal": false}]}, {"name": "Improves blood sugar problems (diabetes)", "body_system": "Endocrine", "entries": [{"practitioner": "Bernard Jensen", "layer": "practitioner", "summary": "Improves blood sugar problems (diabetes)", "caution": null, "anecdotal": false}]}, {"name": "Aids asthma improvement", "body_system": "Respiratory", "entries": [{"practitioner": "Bernard Jensen", "layer": "practitioner", "summary": "Aids asthma improvement", "caution": null, "anecdotal": false}]}, {"name": "Helps sores heal faster; resists bacteria in wounds; eliminates body odor", "body_system": "Integumentary", "entries": [{"practitioner": "Bernard Jensen", "layer": "practitioner", "summary": "Helps sores heal faster; resists bacteria in wounds; eliminates body odor", "caution": null, "anecdotal": false}]}, {"name": "Cleans tooth/gum structure in pyorrhea; benefits inflamed tonsils; relieves sore throat; used as tooth-surgery gargle", "body_system": "Digestive", "entries": [{"practitioner": "Bernard Jensen", "layer": "practitioner", "summary": "Cleans tooth/gum structure in pyorrhea; benefits inflamed tonsils; relieves sore throat; used as tooth-surgery gargle", "caution": null, "anecdotal": false}]}, {"name": "Improves/slows nasal drainage", "body_system": "Respiratory", "entries": [{"practitioner": "Bernard Jensen", "layer": "practitioner", "summary": "Improves/slows nasal drainage", "caution": null, "anecdotal": false}]}, {"name": "Soothes ulcer tissue", "body_system": "Digestive", "entries": [{"practitioner": "Bernard Jensen", "layer": "practitioner", "summary": "Soothes ulcer tissue", "caution": null, "anecdotal": false}]}, {"name": "Soothes hemorrhoids/piles; aids catarrhal discharges", "body_system": "Digestive", "entries": [{"practitioner": "Bernard Jensen", "layer": "practitioner", "summary": "Soothes hemorrhoids/piles; aids catarrhal discharges", "caution": null, "anecdotal": false}]}, {"name": "Revitalizes vascular system in legs; improves varicose veins", "body_system": "Cardiovascular", "entries": [{"practitioner": "Bernard Jensen", "layer": "practitioner", "summary": "Revitalizes vascular system in legs; improves varicose veins", "caution": null, "anecdotal": false}]}, {"name": "Reduces pain from inflammation", "body_system": "Immune", "entries": [{"practitioner": "Bernard Jensen", "layer": "practitioner", "summary": "Reduces pain from inflammation", "caution": null, "anecdotal": false}]}, {"name": "Cardiovascular support", "body_system": "Cardiovascular", "entries": [{"practitioner": "Robert Morse", "layer": "practitioner", "summary": "Raw, mostly-fruit diet framed as alkalizing/anti-inflammatory for the vascular system, said to dissolve cholesterol/mineral plaque and lower blood pressure Herbs: Butcher's Broom, Horse Chestnut, White Oak Bark, Witch Hazel, Red Clover, Hawthorn Berries, Ginkgo Biloba, Bilberry Leaf, Black Walnut Hull", "caution": null, "anecdotal": false}]}, {"name": "Digestive support", "body_system": "Digestive", "entries": [{"practitioner": "Robert Morse", "layer": "practitioner", "summary": "Raw food diet for enzyme content, said to support bile flow and bowel function Herbs: Chickweed, Marshmallow, Bitters, Dandelion Root, Dock family (Yellow Dock, Burdock, Oregon Grape Root), Ginger, Mint family, Gentian, Dandelion Root, Milk Thistle", "caution": null, "anecdotal": false}]}, {"name": "Glandular/Endocrine support", "body_system": "Endocrine", "entries": [{"practitioner": "Robert Morse", "layer": "practitioner", "summary": "Raw food diet said to help balance hormone/steroid response and nutrient utilization Herbs: Bugleweed Leaf, Dandelion Leaf, Parsley Leaf, Poke Root, Kelp, Saw Palmetto Berries, Licorice Root, Astragalus Root, Panax Ginseng Root, Siberian Ginseng Root, Kelp, Saw Palmetto Berries, Chaste Tree Berry, Hawthorn Berries, Bugleweed, Dandelion Leaf, Parsley Leaf, False Unicorn Root", "caution": null, "anecdotal": false}]}, {"name": "Lymphatic support", "body_system": "Lymphatic", "entries": [{"practitioner": "Robert Morse", "layer": "practitioner", "summary": "Fruit-heavy raw diet, especially grapes and lemons, framed as antioxidant/astringent support Herbs: Poke Root, Blood Root, Fenugreek, Mild Cayenne Pepper, Cascara Sagrada, White Oak Bark, Cleavers, Red Clover, Blue Flag, Plantain, Red Root, Yellow Dock, Yellow Dock, Poke Root, Blue Flag, White Oak Bark, Reishi Mushroom, Maitake Mushroom, Shiitake Mushroom", "caution": null, "anecdotal": false}]}, {"name": "Immune support", "body_system": "Immune", "entries": [{"practitioner": "Robert Morse", "layer": "practitioner", "summary": "Raw food diet said to reduce inflammatory immune load by removing acids and foreign proteins Herbs: Poke Root, Blood Root, Blue Flag, Bugleweed, Red Clover Flower, Fenugreek Seed, Plantain Leaf, Oregon Grape Root, Reishi Mushroom, Shiitake Mushroom, Astragalus Root, Kelp/Bladderwrack, Elk or Deer Antler, Panax Ginseng, Echinacea (Purpurea, Angustifolia, Pallida), Siberian Ginseng, Maitake Mushroom, Schizandra Berries", "caution": null, "anecdotal": false}]}, {"name": "Integumentary (skin/hair/nails) support", "body_system": "Integumentary", "entries": [{"practitioner": "Robert Morse", "layer": "practitioner", "summary": "Raw fruit/vegetable diet said to dissolve fatty deposits and support thyroid-driven elimination through skin Herbs: Dock family (Yellow Dock, Oregon Grape Root), Milk Thistle, Poke Root, Chaparral, White Oak Bark, Dock family, Milk Thistle, Horsetail, Comfrey Root and Leaf", "caution": null, "anecdotal": false}]}, {"name": "Intestinal support", "body_system": "Digestive", "entries": [{"practitioner": "Robert Morse", "layer": "practitioner", "summary": "High-fiber raw food diet for elimination support Herbs: Cascara Sagrada, Psyllium Seed, Flax Seed, Dock family, Marshmallow, Slippery Elm, White Oak Bark, Cascara Sagrada, Mullein, Chickweed, Dock family, Marshmallow, Slippery Elm, Gentian", "caution": null, "anecdotal": false}]}, {"name": "Muscular support", "body_system": "Musculoskeletal", "entries": [{"practitioner": "Robert Morse", "layer": "practitioner", "summary": "Green leafy vegetables and vegetable juices for amino acids and usable calcium Herbs: Poke Root, Plantain, Blood Root, Fenugreek Seed, Chaparral, White Oak Bark, Blue Flag, Red Clover, Burdock Root, Dandelion Root, Alfalfa, Kelp, Panax Ginseng, Comfrey Root and Leaf, Horsetail", "caution": null, "anecdotal": false}]}, {"name": "Nervous support", "body_system": "Neurological", "entries": [{"practitioner": "Robert Morse", "layer": "practitioner", "summary": "Fruit-primary raw diet, framed by Morse as the highest electromagnetic-energy food group, claimed to support nerve/brain regeneration", "caution": null, "anecdotal": false}]}, {"name": "Hypertension / high blood pressure", "body_system": "Cardiovascular", "entries": [{"practitioner": "Dr. Sebi", "layer": "practitioner", "summary": "Avoid meat and alcohol, limit tea; eat olives, wild rice, lettuce, cucumber, bell peppers, kale, squash, valerian, chickpeas, and dried fruit", "caution": null, "anecdotal": false}]}, {"name": "Obesity", "body_system": "Endocrine", "entries": [{"practitioner": "Dr. Sebi", "layer": "practitioner", "summary": "Emphasize fruits/vegetables, avoid meat and alcohol, high fluid intake", "caution": null, "anecdotal": false}]}, {"name": "Stress ulcer", "body_system": "Digestive", "entries": [{"practitioner": "Dr. Sebi", "layer": "practitioner", "summary": "Tomatoes, squash, ripe fruit (apples, peaches, raisins), sour soups, fennel and chamomile tea", "caution": null, "anecdotal": false}]}, {"name": "Constipation", "body_system": "Digestive", "entries": [{"practitioner": "Dr. Sebi", "layer": "practitioner", "summary": "Apples, peaches, plums, figs, squash, kale, chickpeas, basil, nuts; fennel, dandelion, and chamomile tea", "caution": null, "anecdotal": false}]}, {"name": "Atherosclerosis", "body_system": "Cardiovascular", "entries": [{"practitioner": "Dr. Sebi", "layer": "practitioner", "summary": "No smoking/alcohol, limit coffee; lettuce tea, wild rice, fruits/vegetables, exercise", "caution": null, "anecdotal": false}]}, {"name": "Herpes / STDs", "body_system": "Immune", "entries": [{"practitioner": "Dr. Sebi", "layer": "practitioner", "summary": "Burdock and dandelion tea, dates, lettuce (explicitly framed as supportive, not curative - the text itself states these are viral infections the immune system cannot fully clear)", "caution": null, "anecdotal": false}]}, {"name": "Gout", "body_system": "Musculoskeletal", "entries": [{"practitioner": "Dr. Sebi", "layer": "practitioner", "summary": "Weight loss, vitamin-rich diet, avoid alcohol; burdock, dandelion, and elderberry tea; alkaline fruits/vegetables to help lower uric acid", "caution": null, "anecdotal": false}]}, {"name": "GERD (acid reflux)", "body_system": "Digestive", "entries": [{"practitioner": "Dr. Sebi", "layer": "practitioner", "summary": "Lifestyle change, exercise, no smoking, avoidance of acidic foods per the broader nutrition guide", "caution": null, "anecdotal": false}]}, {"name": "Asthma", "body_system": "Respiratory", "entries": [{"practitioner": "Dr. Sebi", "layer": "practitioner", "summary": "Fennel, anise, and chamomile tea; alkaline fruits and vegetables", "caution": null, "anecdotal": false}]}, {"name": "Blood impurities", "body_system": "Hematologic", "entries": [{"practitioner": "Llaila Afrika", "layer": "practitioner", "summary": "Traditional herbs: Bayberry, Bugleweed, Chaparral, Chickweed, Comfrey Root, Gentian, Goldenseal, Myrrh, Primrose, Red Clover, Yellow Dock", "caution": null, "anecdotal": false}]}, {"name": "Cramps", "body_system": "Musculoskeletal", "entries": [{"practitioner": "Llaila Afrika", "layer": "practitioner", "summary": "Traditional herbs: Bayberry, Blue Cohosh, Coral, Fennel, Masterwort, Motherwort, Pennyroyal, Squaw Vine, Thyme, Twin Leaf, Wood Betony", "caution": null, "anecdotal": false}]}, {"name": "Bowel (digestive problems, constipation)", "body_system": "Digestive", "entries": [{"practitioner": "Llaila Afrika", "layer": "practitioner", "summary": "Traditional herbs: Catnip, Comfrey, Dandelion, Fenugreek, Goldenseal, Magnolia, Marshmallow, Tansy, Witch Hazel", "caution": null, "anecdotal": false}]}, {"name": "Dandruff", "body_system": "Integumentary", "entries": [{"practitioner": "Llaila Afrika", "layer": "practitioner", "summary": "Traditional herbs: Aloe, Burdock, Indian Hemp, Rosemary, Sage", "caution": null, "anecdotal": false}]}, {"name": "Diabetes", "body_system": "Endocrine", "entries": [{"practitioner": "Llaila Afrika", "layer": "practitioner", "summary": "Traditional herbs: Bilberry, Blue Cohosh, Gymnema Sylvestre, Periwinkle, Poplar, Raspberry Leaves, Saw Palmetto", "caution": null, "anecdotal": false}]}, {"name": "Dizziness", "body_system": "Neurological", "entries": [{"practitioner": "Llaila Afrika", "layer": "practitioner", "summary": "Traditional herbs: Catnip, Peppermint, Rue, Wood Betony, Burnet, Hops, Origanum, Pimpernel, Fenugreek, Garlic, Yellow Dock", "caution": null, "anecdotal": false}]}, {"name": "Breast (inflamed, sore, swollen)", "body_system": "Reproductive", "entries": [{"practitioner": "Llaila Afrika", "layer": "practitioner", "summary": "Traditional herbs: Black Cohosh, Comfrey, Ginger, Goldenseal, Myrrh, Parsley, Poke Root, St. John's Root, Slippery Elm (sore nipples)", "caution": null, "anecdotal": false}]}, {"name": "Bronchitis", "body_system": "Respiratory", "entries": [{"practitioner": "Llaila Afrika", "layer": "practitioner", "summary": "Traditional herbs: Black Cohosh, Coltsfoot, Comfrey, Flaxseed, Ginseng, Goldenseal, Horehound, Hyssop, Lungwort, Myrrh, Origanum, Pleurisy Root, Red Sage", "caution": null, "anecdotal": false}]}, {"name": "Eczema", "body_system": "Integumentary", "entries": [{"practitioner": "Llaila Afrika", "layer": "practitioner", "summary": "Traditional herbs: Balmony, Bloodroot, Calendula, Chickweed, Dandelion, Goldenseal, Nettle, Plantain, Primrose, Yellow Dock", "caution": null, "anecdotal": false}]}, {"name": "Burns", "body_system": "Integumentary", "entries": [{"practitioner": "Llaila Afrika", "layer": "practitioner", "summary": "Traditional herbs: Aloe Vera, Bittersweet, Burdock, Calamus, Calendula, Comfrey, Onions, Primrose, Poplar", "caution": null, "anecdotal": false}]}, {"name": "Epilepsy", "body_system": "Neurological", "entries": [{"practitioner": "Llaila Afrika", "layer": "practitioner", "summary": "Traditional herbs: Black Cohosh, Elder, Lady's Slipper, Mistletoe, Skullcap, Valerian, Vervain", "caution": null, "anecdotal": false}]}, {"name": "Cancer", "body_system": "Oncologic", "entries": [{"practitioner": "Llaila Afrika", "layer": "practitioner", "summary": "Traditional herbs: Blue Flag, Blue Violet, Chaparral, Dandelion, Goldenseal, Pau D'Arco, Sage, Sorrel, Yellow Dock", "caution": "Presented as supportive herbal folklore, not a treatment for cancer - flag strongly given the seriousness of the condition", "anecdotal": false}]}, {"name": "Eyes", "body_system": "Sensory", "entries": [{"practitioner": "Llaila Afrika", "layer": "practitioner", "summary": "Traditional herbs: Bilberry, Chamomile, Chickweed, Eyebright, Goldenseal, Hyssop, Rosemary, Sassafras, Slippery Elm, Squaw Vine, Tansy", "caution": null, "anecdotal": false}]}, {"name": "Convulsions", "body_system": "Neurological", "entries": [{"practitioner": "Llaila Afrika", "layer": "practitioner", "summary": "Traditional herbs: Arnica, Black Cohosh, Catnip, Fennel, Hyssop, Mistletoe, Peppermint, Self-Heal, Skullcap, Valerian", "caution": null, "anecdotal": false}]}, {"name": "Gallstones", "body_system": "Hepatic", "entries": [{"practitioner": "Llaila Afrika", "layer": "practitioner", "summary": "Traditional herbs: Bitterroot, Cascara Sagrada, Chamomile, Cherry Bark, Hydrangea, Mandrake, Milkweed, Parsley, Rhubarb, Wood Betony", "caution": null, "anecdotal": false}]}, {"name": "Gas (type of constipation)", "body_system": "Digestive", "entries": [{"practitioner": "Llaila Afrika", "layer": "practitioner", "summary": "Traditional herbs: Agrimony, Aloe Cape, Balmony, Bay Leaves, Bitterroot, Cascara Sagrada, Cayenne, Chamomile, Ginseng, Goldenseal, Hyssop, Red Sage, Senna", "caution": null, "anecdotal": false}]}, {"name": "Glandular organs", "body_system": "Endocrine", "entries": [{"practitioner": "Llaila Afrika", "layer": "practitioner", "summary": "Traditional herbs: Bittersweet, Echinacea, Mullein, Parsley, Poke Root, Sea Wrack, Stinging Nettle, Yellow Dock", "caution": null, "anecdotal": false}]}, {"name": "Goiter", "body_system": "Endocrine", "entries": [{"practitioner": "Llaila Afrika", "layer": "practitioner", "summary": "Traditional herbs: Bayberry Bark, Echinacea, Irish Moss, Poke Root, Sea Wrack, White Oak Bark", "caution": null, "anecdotal": false}]}, {"name": "Heartburn", "body_system": "Digestive", "entries": [{"practitioner": "Llaila Afrika", "layer": "practitioner", "summary": "Traditional herbs: Anise, Catnip, Fennel, Ginger, Nutmeg, Peppermint, Sage, Sassafras, Thyme, Wood Betony, Yarrow", "caution": null, "anecdotal": false}]}, {"name": "Hemorrhoids", "body_system": "Digestive", "entries": [{"practitioner": "Llaila Afrika", "layer": "practitioner", "summary": "Traditional herbs: Aloes, Bittersweet, Burdock, Goldenseal, Myrrh, Nettle, Shepherd's Purse, White Oak Bark, Uva Ursi", "caution": null, "anecdotal": false}]}, {"name": "Headache", "body_system": "Neurological", "entries": [{"practitioner": "Llaila Afrika", "layer": "practitioner", "summary": "Traditional herbs: Blue Violet, Calamine, Chamomile, Coltsfoot, Elder, Feverfew, Holy Thistle, Marjoram, Pennyroyal, Rhubarb, Rosemary, Rue, Skullcap, Tansy, Vervain, Wood Betony, Yerba Santa", "caution": null, "anecdotal": false}]}, {"name": "High or low blood pressure", "body_system": "Cardiovascular", "entries": [{"practitioner": "Llaila Afrika", "layer": "practitioner", "summary": "Traditional herbs: Aloes, Black Cohosh, Blue Cohosh, Broom, Cayenne, Garlic, Ginseng, Goldenseal, Hyssop, Myrrh, Parsley, Skullcap, Valerian, Vervain, Wild Cherry", "caution": null, "anecdotal": false}]}, {"name": "Kidney problems", "body_system": "Renal", "entries": [{"practitioner": "Llaila Afrika", "layer": "practitioner", "summary": "Traditional herbs: Aloes, Balm, Beech, Beth Root, Bitterroot, Broom, Cayenne, Celandine, Chamomile, Chickweed, Cleavers, Dandelion, Goldenseal, Hemlock, Hyssop, Masterwort, Milkweed, Oregon Grape, Parsley, Poplar, Poke Root, Sage, Sanicle, Sea Wrack, Spearmint, Tansy, White Oak Bark, White Pine", "caution": null, "anecdotal": false}]}, {"name": "Liver problems", "body_system": "Hepatic", "entries": [{"practitioner": "Llaila Afrika", "layer": "practitioner", "summary": "Traditional herbs: Bayberry Bark, Bistort Root, Bittersweet, Bloodroot, Borage, Broom, Buckbean, Celandine, Chamomile, Chicory, Cleavers, Dandelion Root, Fennel, Gentian Root, Horehound, Indian Hemp, Lungwort, Mandrake, Milk Thistle, Origanum, Parsley, Peach Leaves, Pennyroyal, Plantain, St. John's Wort, Senna Leaves, Sorrel, Tansy, Wormwood", "caution": null, "anecdotal": false}]}, {"name": "Menstruation", "body_system": "Reproductive", "entries": [{"practitioner": "Llaila Afrika", "layer": "practitioner", "summary": "Traditional herbs: Wild Alum Root, Tormentil, Bayberry Bark, Sage, Shepherd's Purse, Uva Ursi, Bistort Root, Burnet, Sorrel, Pilewort, Sanicle, Lungwort, Witch Hazel, Wood Betony, Arnica, Horsetail, Yarrow, Saffron, Raspberry Leaves, Cleavers, Pleurisy Root", "caution": null, "anecdotal": false}]}, {"name": "Mental illness", "body_system": "Mental Health", "entries": [{"practitioner": "Llaila Afrika", "layer": "practitioner", "summary": "Traditional herbs: Arnica, Catnip, Holy Thistle, Peppermint, Rosemary, St. John's Wort, Skullcap, Vervain, Wood Betony", "caution": null, "anecdotal": false}]}, {"name": "Nausea", "body_system": "Digestive", "entries": [{"practitioner": "Llaila Afrika", "layer": "practitioner", "summary": "Traditional herbs: Anise, Ginger, Goldenseal, Lavender, Mint, Origanum, Peach Leaves, Peppermint, Red Raspberry, Spearmint, Solomon's Seal, Sweet Balm, Wild Yam", "caution": null, "anecdotal": false}]}, {"name": "Pancreas", "body_system": "Endocrine", "entries": [{"practitioner": "Llaila Afrika", "layer": "practitioner", "summary": "Traditional herbs: Bilberry, Bittersweet, Blueberry Leaves, Cayenne, Dandelion, Goldenseal, Uva Ursi, Wahoo", "caution": null, "anecdotal": false}]}, {"name": "Paralysis", "body_system": "Neurological", "entries": [{"practitioner": "Llaila Afrika", "layer": "practitioner", "summary": "Traditional herbs: Black Cohosh, Cayenne, Cramp Bark, Ginger, Lady's Slipper, Skullcap, Valerian", "caution": null, "anecdotal": false}]}, {"name": "Pneumonia", "body_system": "Respiratory", "entries": [{"practitioner": "Llaila Afrika", "layer": "practitioner", "summary": "Traditional herbs: Black Cohosh, Bloodroot, Coltsfoot, Comfrey, Elecampane, Horehound, Marshmallow, Peruvian Bark, Red Sage, Skunk Cabbage, Spikenard, Vervain, Wild Cherry, Willow", "caution": null, "anecdotal": false}]}, {"name": "Prostate", "body_system": "Reproductive", "entries": [{"practitioner": "Llaila Afrika", "layer": "practitioner", "summary": "Traditional herbs: Dopa Bean, Goldenseal Root, Gravel Root, Horsetail, Juniper Berry, Maca, Marshmallow, Muira Puama, Nettle, Pygeum, Saw Palmetto, Yohimbe", "caution": null, "anecdotal": false}]}, {"name": "Skin eruptions (sores/bumps)", "body_system": "Integumentary", "entries": [{"practitioner": "Llaila Afrika", "layer": "practitioner", "summary": "Traditional herbs: Beech, Birch, Bittersweet, Blue Flag, Blue Violet, Buckthorn, Burdock, Chickweed, Cleavers, Comfrey, Dandelion, Elder, Flaxseed, Goldenseal, Hyssop, Hops, Lobelia, Magnolia, Oregon Grape, Origanum, Pennyroyal, Plantain, Poke Root, Primrose, Prince Pine, Red Clover, Red Root, Rock Rose, Saffron, Sarsaparilla, Sassafras, Sorrel, Spikenard, Turkey Corn, Vervain, White Clover, Wintergreen, Wood Sage", "caution": null, "anecdotal": false}]}, {"name": "Stomach (indigestion, upset)", "body_system": "Digestive", "entries": [{"practitioner": "Llaila Afrika", "layer": "practitioner", "summary": "Traditional herbs: Aloes, Angelica, Anise, Balmony, Bay Leaves, Bayberry, Calamus, Caraway Seed, Catnip, Cayenne, Cedron, Chamomile, Chicory, Comfrey, Cubeb, Echinacea, Goldenseal, Hyssop, Marjoram, Milkweed, Mugwort, Pimpernel, Rue, Sage, Sassafras, Slippery Elm, Strawberry, Thyme, Valerian, Vervain, Willow, Witch Hazel", "caution": null, "anecdotal": false}]}, {"name": "Syphilis", "body_system": "Reproductive", "entries": [{"practitioner": "Llaila Afrika", "layer": "practitioner", "summary": "Traditional herbs: Barberry, Bittersweet, Bloodroot, Blue Violet, Buglewood, Chaparral, Echinacea, Elder, Goldenseal, Milkweed, Oregon Grape, Palmetto, Parsley, Plantain, Poplar, Prickly Ash, Red Clover, Sanicle, Yellow Dock", "caution": null, "anecdotal": false}]}, {"name": "Throat, irritated/sore", "body_system": "Respiratory", "entries": [{"practitioner": "Llaila Afrika", "layer": "practitioner", "summary": "Traditional herbs: Barberry, Bloodroot, Cayenne, Fenugreek, Ginger, Goldenseal, Hops, Horehound, Hyssop, Mullein, Sage, Saw Palmetto Berries, Vervain, White Pine, Wild Alum Root, Wood Sage, Wood Sanicle", "caution": null, "anecdotal": false}]}, {"name": "Thyroid", "body_system": "Endocrine", "entries": [{"practitioner": "Llaila Afrika", "layer": "practitioner", "summary": "Traditional herbs: Cayenne, Irish Moss, Kelp, Pau D'Arco, Parsley", "caution": null, "anecdotal": false}]}, {"name": "Tonsillitis", "body_system": "Immune", "entries": [{"practitioner": "Llaila Afrika", "layer": "practitioner", "summary": "Traditional herbs: Cat's Claw, Echinacea, Goldenseal, Mullein, Red Root, Sage, Tansy, White Pine", "caution": null, "anecdotal": false}]}, {"name": "Tumors", "body_system": "Oncologic", "entries": [{"practitioner": "Llaila Afrika", "layer": "practitioner", "summary": "Traditional herbs: Burdock, Cat's Claw, Cranesbill, Sanicle, Shepherd's Purse, Thuja, Witch Hazel", "caution": "Traditional folklore usage - present as historical/cultural remedy tradition, not tumor treatment", "anecdotal": false}]}, {"name": "Cancer (supportive, traditional)", "body_system": "Oncologic", "entries": [{"practitioner": "Rene Caisse", "layer": "practitioner", "summary": "Traditional four-herb formula (Burdock Root, Sheep Sorrel, Turkey Rhubarb Root, Slippery Elm Bark) - see herb reference for details.", "caution": "Historical/traditional use only - not established cancer treatment", "anecdotal": false}]}, {"name": "Hepatic (Liver)", "body_system": "Hepatic", "entries": [{"practitioner": "Cherie & John Calbom", "layer": "practitioner", "summary": "Liver detox is described in two enzymatic phases: Phase I (cytochrome P450 enzymes convert fat-soluble toxins to water-soluble intermediates) and Phase II (conjugation - intermediates are bound to carrier molecules for excretion). Imbalance between the two phases, especially fast Phase I with slow Phase II, is described as allowing reactive 'sticky' intermediates to accumulate, which is linked in ", "caution": null, "anecdotal": false}]}, {"name": "Intestinal", "body_system": "Digestive", "entries": [{"practitioner": "Cherie & John Calbom", "layer": "practitioner", "summary": "Draws directly on Bernard Jensen's bowel-care framework (cited by name/book title). Emphasizes that insufficient fiber slows transit time, allowing putrefactive bacteria to dominate and produce toxins (ammonia, hydrogen sulfide, tyramine) that can be reabsorbed into the bloodstream ('autointoxication'). Notes intestinal mucin buildup is linked in cited studies to epithelial cell changes associated", "caution": null, "anecdotal": false}]}, {"name": "The Complete/Easy Kidney Cleanse", "body_system": "Renal", "entries": [{"practitioner": "Cherie & John Calbom", "layer": "practitioner", "summary": "", "caution": null, "anecdotal": false}]}, {"name": "The Lung Cleanse", "body_system": "Respiratory", "entries": [{"practitioner": "Cherie & John Calbom", "layer": "practitioner", "summary": "", "caution": null, "anecdotal": false}]}, {"name": "The Skin Cleanse", "body_system": "Integumentary", "entries": [{"practitioner": "Cherie & John Calbom", "layer": "practitioner", "summary": "", "caution": null, "anecdotal": false}]}, {"name": "The Lymphatic System Cleanse", "body_system": "Lymphatic", "entries": [{"practitioner": "Cherie & John Calbom", "layer": "practitioner", "summary": "", "caution": null, "anecdotal": false}]}, {"name": "Gallbladder Cleanse (Epsom salt liver/gallbladder flush)", "body_system": "Hepatic", "entries": [{"practitioner": "Cherie & John Calbom", "layer": "practitioner", "summary": "", "caution": "Uses Epsom salt drinks over roughly a 7-day protocol; expected outcome per the source is passage of small green 'stones' (pea-sized or smaller) or sediment/'sand.' This is a widely circulated folk protocol; the passed material is commonly understood by critics to be a soap-like precipitate formed from the olive oil/citrus/Epsom salt mixture rather than true gallstones - worth flagging that controversy if this content surfaces in the app.", "anecdotal": false}]}], "philosophies": [{"practitioner": "Bernard Jensen", "name": "The Neural-Arc Reflex", "summary": "Jensen's central theory: because the embryonic 'gut tube' and nervous system form together in early development, and internal organs bud outward from that same gut tube, each organ remains neurologically and structurally linked to the specific section of bowel it originated from. A weakness or toxic buildup in a given bowel zone is theorized to 'reflex' (via referred nerve pathways) to the organ that budded from that zone, causing symptoms in a body part that can be physically remote from the bowel itself.", "caution": "This reflex-zone theory is not part of mainstream physiology or embryology as taught in medical curricula. Present as Jensen's framework, not as established science."}, {"practitioner": "Robert Morse", "name": "The Three Root Causes of Disease", "summary": "", "caution": null}, {"practitioner": "Dr. Sebi", "name": "Alkaline / 'Electric' Body Theory", "summary": "Disease is attributed to acidity and mucus buildup in the body, which is said to allow bacteria and viruses to thrive; the goal of the diet is to keep the body in an alkaline state using an approved list of plant foods and herbs.", "caution": null}, {"practitioner": "Arnold Ehret", "name": "The Formula of Life: V = P - O", "summary": "Ehret's central equation: Vitality (V) equals Power (P) minus Obstruction (O). 'Obstruction' means mucus, toxemias, and other internal impurities from wrong diet, which block circulation and organ function. When obstruction exceeds the body's power, the 'human machine' breaks down. Ehret frames the lungs as a pump driven by atmospheric pressure, and treats removing obstruction (mucus) - not adding stimulation - as the true path to healing.", "caution": null}], "herbs": [{"name": "Agrimony", "practitioners": ["Llaila Afrika"]}, {"name": "Alfalfa", "practitioners": ["Dr. Sebi", "Robert Morse"]}, {"name": "Aloe", "practitioners": ["Llaila Afrika"]}, {"name": "Aloe Cape", "practitioners": ["Llaila Afrika"]}, {"name": "Aloe Vera", "practitioners": ["Llaila Afrika"]}, {"name": "Aloes", "practitioners": ["Llaila Afrika"]}, {"name": "Angelica", "practitioners": ["Llaila Afrika"]}, {"name": "Anise", "practitioners": ["Llaila Afrika"]}, {"name": "Arnica", "practitioners": ["Llaila Afrika"]}, {"name": "Astragalus Root", "practitioners": ["Robert Morse"]}, {"name": "Balm", "practitioners": ["Llaila Afrika"]}, {"name": "Balmony", "practitioners": ["Llaila Afrika"]}, {"name": "Barberry", "practitioners": ["Llaila Afrika"]}, {"name": "Bay Leaves", "practitioners": ["Llaila Afrika"]}, {"name": "Bayberry", "practitioners": ["Llaila Afrika"]}, {"name": "Bayberry Bark", "practitioners": ["Llaila Afrika"]}, {"name": "Beech", "practitioners": ["Llaila Afrika"]}, {"name": "Beth Root", "practitioners": ["Llaila Afrika"]}, {"name": "Bilberry", "practitioners": ["Llaila Afrika"]}, {"name": "Bilberry Leaf", "practitioners": ["Robert Morse"]}, {"name": "Birch", "practitioners": ["Llaila Afrika"]}, {"name": "Bistort Root", "practitioners": ["Llaila Afrika"]}, {"name": "Bitterroot", "practitioners": ["Llaila Afrika"]}, {"name": "Bitters", "practitioners": ["Robert Morse"]}, {"name": "Bittersweet", "practitioners": ["Llaila Afrika"]}, {"name": "Black Cohosh", "practitioners": ["Llaila Afrika"]}, {"name": "Black Walnut Hull", "practitioners": ["Robert Morse"]}, {"name": "Blood Root", "practitioners": ["Robert Morse"]}, {"name": "Bloodroot", "practitioners": ["Llaila Afrika"]}, {"name": "Blue Cohosh", "practitioners": ["Llaila Afrika"]}, {"name": "Blue Flag", "practitioners": ["Llaila Afrika", "Robert Morse"]}, {"name": "Blue Violet", "practitioners": ["Llaila Afrika"]}, {"name": "Blueberry Leaves", "practitioners": ["Llaila Afrika"]}, {"name": "Borage", "practitioners": ["Llaila Afrika"]}, {"name": "Broom", "practitioners": ["Llaila Afrika"]}, {"name": "Buckbean", "practitioners": ["Llaila Afrika"]}, {"name": "Buckthorn", "practitioners": ["Llaila Afrika"]}, {"name": "Bugleweed", "practitioners": ["Llaila Afrika", "Robert Morse"]}, {"name": "Bugleweed Leaf", "practitioners": ["Robert Morse"]}, {"name": "Buglewood", "practitioners": ["Llaila Afrika"]}, {"name": "Bupleurum root", "practitioners": ["Cherie & John Calbom"]}, {"name": "Burdock", "practitioners": ["Llaila Afrika"]}, {"name": "Burdock Root", "practitioners": ["Rene Caisse", "Robert Morse"]}, {"name": "Burdock root", "practitioners": ["Dr. Sebi"]}, {"name": "Burnet", "practitioners": ["Llaila Afrika"]}, {"name": "Butcher's Broom", "practitioners": ["Robert Morse"]}, {"name": "Calamine", "practitioners": ["Llaila Afrika"]}, {"name": "Calamus", "practitioners": ["Llaila Afrika"]}, {"name": "Calendula", "practitioners": ["Llaila Afrika"]}, {"name": "Caraway Seed", "practitioners": ["Llaila Afrika"]}, {"name": "Cascara Sagrada", "practitioners": ["Llaila Afrika", "Robert Morse"]}, {"name": "Cascara sagrada", "practitioners": ["Dr. Sebi"]}, {"name": "Cat's Claw", "practitioners": ["Llaila Afrika"]}, {"name": "Catnip", "practitioners": ["Llaila Afrika"]}, {"name": "Cayenne", "practitioners": ["Llaila Afrika"]}, {"name": "Cedron", "practitioners": ["Llaila Afrika"]}, {"name": "Celandine", "practitioners": ["Llaila Afrika"]}, {"name": "Chamomile", "practitioners": ["Dr. Sebi", "Llaila Afrika"]}, {"name": "Chaparral", "practitioners": ["Llaila Afrika", "Robert Morse"]}, {"name": "Chaste Tree Berry", "practitioners": ["Robert Morse"]}, {"name": "Cherry Bark", "practitioners": ["Llaila Afrika"]}, {"name": "Chickweed", "practitioners": ["Llaila Afrika", "Robert Morse"]}, {"name": "Chicory", "practitioners": ["Llaila Afrika"]}, {"name": "Cleavers", "practitioners": ["Llaila Afrika", "Robert Morse"]}, {"name": "Coltsfoot", "practitioners": ["Llaila Afrika"]}, {"name": "Comfrey", "practitioners": ["Llaila Afrika"]}, {"name": "Comfrey Root", "practitioners": ["Llaila Afrika"]}, {"name": "Comfrey Root and Leaf", "practitioners": ["Robert Morse"]}, {"name": "Coral", "practitioners": ["Llaila Afrika"]}, {"name": "Cramp Bark", "practitioners": ["Llaila Afrika"]}, {"name": "Cranesbill", "practitioners": ["Llaila Afrika"]}, {"name": "Cubeb", "practitioners": ["Llaila Afrika"]}, {"name": "Curcumin (turmeric)", "practitioners": ["Cherie & John Calbom"]}, {"name": "Dandelion", "practitioners": ["Cherie & John Calbom", "Dr. Sebi", "Llaila Afrika"]}, {"name": "Dandelion Leaf", "practitioners": ["Robert Morse"]}, {"name": "Dandelion Root", "practitioners": ["Llaila Afrika", "Robert Morse"]}, {"name": "Dock family", "practitioners": ["Robert Morse"]}, {"name": "Dock family (Yellow Dock, Burdock, Oregon Grape Root)", "practitioners": ["Robert Morse"]}, {"name": "Dock family (Yellow Dock, Oregon Grape Root)", "practitioners": ["Robert Morse"]}, {"name": "Dopa Bean", "practitioners": ["Llaila Afrika"]}, {"name": "Echinacea", "practitioners": ["Llaila Afrika"]}, {"name": "Echinacea (Purpurea, Angustifolia, Pallida)", "practitioners": ["Robert Morse"]}, {"name": "Elder", "practitioners": ["Llaila Afrika"]}, {"name": "Elderberry", "practitioners": ["Dr. Sebi"]}, {"name": "Elecampane", "practitioners": ["Llaila Afrika"]}, {"name": "Elk or Deer Antler", "practitioners": ["Robert Morse"]}, {"name": "Eyebright", "practitioners": ["Llaila Afrika"]}, {"name": "False Unicorn Root", "practitioners": ["Robert Morse"]}, {"name": "Fennel", "practitioners": ["Llaila Afrika"]}, {"name": "Fenugreek", "practitioners": ["Llaila Afrika", "Robert Morse"]}, {"name": "Fenugreek Seed", "practitioners": ["Robert Morse"]}, {"name": "Feverfew", "practitioners": ["Llaila Afrika"]}, {"name": "Flax Seed", "practitioners": ["Robert Morse"]}, {"name": "Flaxseed", "practitioners": ["Llaila Afrika"]}, {"name": "Garlic", "practitioners": ["Llaila Afrika"]}, {"name": "Gentian", "practitioners": ["Llaila Afrika", "Robert Morse"]}, {"name": "Gentian Root", "practitioners": ["Llaila Afrika"]}, {"name": "Ginger", "practitioners": ["Llaila Afrika", "Robert Morse"]}, {"name": "Ginkgo Biloba", "practitioners": ["Robert Morse"]}, {"name": "Ginseng", "practitioners": ["Llaila Afrika"]}, {"name": "Goldenseal", "practitioners": ["Llaila Afrika"]}, {"name": "Goldenseal Root", "practitioners": ["Llaila Afrika"]}, {"name": "Gravel Root", "practitioners": ["Llaila Afrika"]}, {"name": "Guaco", "practitioners": ["Dr. Sebi"]}, {"name": "Gymnema Sylvestre", "practitioners": ["Llaila Afrika"]}, {"name": "Hawthorn Berries", "practitioners": ["Robert Morse"]}, {"name": "Hemlock", "practitioners": ["Llaila Afrika"]}, {"name": "Holy Thistle", "practitioners": ["Llaila Afrika"]}, {"name": "Hops", "practitioners": ["Llaila Afrika"]}, {"name": "Horehound", "practitioners": ["Llaila Afrika"]}, {"name": "Horse Chestnut", "practitioners": ["Robert Morse"]}, {"name": "Horsetail", "practitioners": ["Llaila Afrika", "Robert Morse"]}, {"name": "Hydrangea", "practitioners": ["Llaila Afrika"]}, {"name": "Hyssop", "practitioners": ["Llaila Afrika"]}, {"name": "Indian Hemp", "practitioners": ["Llaila Afrika"]}, {"name": "Irish Moss", "practitioners": ["Llaila Afrika"]}, {"name": "Juniper Berry", "practitioners": ["Llaila Afrika"]}, {"name": "Kelp", "practitioners": ["Llaila Afrika", "Robert Morse"]}, {"name": "Kelp/Bladderwrack", "practitioners": ["Robert Morse"]}, {"name": "Lady's Slipper", "practitioners": ["Llaila Afrika"]}, {"name": "Laurel (bay)", "practitioners": ["Dr. Sebi"]}, {"name": "Lavender", "practitioners": ["Llaila Afrika"]}, {"name": "Licorice Root", "practitioners": ["Robert Morse"]}, {"name": "Lobelia", "practitioners": ["Llaila Afrika"]}, {"name": "Lungwort", "practitioners": ["Llaila Afrika"]}, {"name": "Maca", "practitioners": ["Llaila Afrika"]}, {"name": "Magnolia", "practitioners": ["Llaila Afrika"]}, {"name": "Maitake Mushroom", "practitioners": ["Robert Morse"]}, {"name": "Mandrake", "practitioners": ["Llaila Afrika"]}, {"name": "Marjoram", "practitioners": ["Llaila Afrika"]}, {"name": "Marshmallow", "practitioners": ["Llaila Afrika", "Robert Morse"]}, {"name": "Masterwort", "practitioners": ["Llaila Afrika"]}, {"name": "Mild Cayenne Pepper", "practitioners": ["Robert Morse"]}, {"name": "Milk Thistle", "practitioners": ["Llaila Afrika", "Robert Morse"]}, {"name": "Milk thistle (silymarin)", "practitioners": ["Cherie & John Calbom"]}, {"name": "Milkweed", "practitioners": ["Llaila Afrika"]}, {"name": "Mint", "practitioners": ["Llaila Afrika"]}, {"name": "Mint family", "practitioners": ["Robert Morse"]}, {"name": "Mistletoe", "practitioners": ["Llaila Afrika"]}, {"name": "Motherwort", "practitioners": ["Llaila Afrika"]}, {"name": "Mugwort", "practitioners": ["Llaila Afrika"]}, {"name": "Muira Puama", "practitioners": ["Llaila Afrika"]}, {"name": "Mullein", "practitioners": ["Dr. Sebi", "Llaila Afrika", "Robert Morse"]}, {"name": "Myrrh", "practitioners": ["Llaila Afrika"]}, {"name": "Nettle", "practitioners": ["Llaila Afrika"]}, {"name": "Nutmeg", "practitioners": ["Llaila Afrika"]}, {"name": "Onions", "practitioners": ["Llaila Afrika"]}, {"name": "Oregon Grape", "practitioners": ["Llaila Afrika"]}, {"name": "Oregon Grape Root", "practitioners": ["Robert Morse"]}, {"name": "Origanum", "practitioners": ["Llaila Afrika"]}, {"name": "Palmetto", "practitioners": ["Llaila Afrika"]}, {"name": "Panax Ginseng", "practitioners": ["Robert Morse"]}, {"name": "Panax Ginseng Root", "practitioners": ["Robert Morse"]}, {"name": "Parsley", "practitioners": ["Llaila Afrika"]}, {"name": "Parsley Leaf", "practitioners": ["Robert Morse"]}, {"name": "Pau D'Arco", "practitioners": ["Llaila Afrika"]}, {"name": "Peach Leaves", "practitioners": ["Llaila Afrika"]}, {"name": "Pennyroyal", "practitioners": ["Llaila Afrika"]}, {"name": "Peppermint", "practitioners": ["Llaila Afrika"]}, {"name": "Periwinkle", "practitioners": ["Llaila Afrika"]}, {"name": "Peruvian Bark", "practitioners": ["Llaila Afrika"]}, {"name": "Pilewort", "practitioners": ["Llaila Afrika"]}, {"name": "Pimpernel", "practitioners": ["Llaila Afrika"]}, {"name": "Plantain", "practitioners": ["Llaila Afrika", "Robert Morse"]}, {"name": "Plantain Leaf", "practitioners": ["Robert Morse"]}, {"name": "Pleurisy Root", "practitioners": ["Llaila Afrika"]}, {"name": "Poke Root", "practitioners": ["Llaila Afrika", "Robert Morse"]}, {"name": "Poplar", "practitioners": ["Llaila Afrika"]}, {"name": "Prickly Ash", "practitioners": ["Llaila Afrika"]}, {"name": "Primrose", "practitioners": ["Llaila Afrika"]}, {"name": "Prince Pine", "practitioners": ["Llaila Afrika"]}, {"name": "Prodigiosa (Brickellia grandiflora)", "practitioners": ["Dr. Sebi"]}, {"name": "Psyllium Seed", "practitioners": ["Robert Morse"]}, {"name": "Pygeum", "practitioners": ["Llaila Afrika"]}, {"name": "Raspberry Leaves", "practitioners": ["Llaila Afrika"]}, {"name": "Red Clover", "practitioners": ["Llaila Afrika", "Robert Morse"]}, {"name": "Red Clover Flower", "practitioners": ["Robert Morse"]}, {"name": "Red Raspberry", "practitioners": ["Llaila Afrika"]}, {"name": "Red Root", "practitioners": ["Llaila Afrika", "Robert Morse"]}, {"name": "Red Sage", "practitioners": ["Llaila Afrika"]}, {"name": "Red clover", "practitioners": ["Dr. Sebi"]}, {"name": "Reishi Mushroom", "practitioners": ["Robert Morse"]}, {"name": "Rhubarb", "practitioners": ["Llaila Afrika"]}, {"name": "Rhubarb root", "practitioners": ["Dr. Sebi"]}, {"name": "Rock Rose", "practitioners": ["Llaila Afrika"]}, {"name": "Rosemary", "practitioners": ["Llaila Afrika"]}, {"name": "Rue", "practitioners": ["Llaila Afrika"]}, {"name": "Saffron", "practitioners": ["Llaila Afrika"]}, {"name": "Sage", "practitioners": ["Llaila Afrika"]}, {"name": "Sanicle", "practitioners": ["Llaila Afrika"]}, {"name": "Sarsaparilla", "practitioners": ["Llaila Afrika"]}, {"name": "Sassafras", "practitioners": ["Llaila Afrika"]}, {"name": "Saw Palmetto", "practitioners": ["Llaila Afrika"]}, {"name": "Saw Palmetto Berries", "practitioners": ["Llaila Afrika", "Robert Morse"]}, {"name": "Schizandra Berries", "practitioners": ["Robert Morse"]}, {"name": "Sea Wrack", "practitioners": ["Llaila Afrika"]}, {"name": "Self-Heal", "practitioners": ["Llaila Afrika"]}, {"name": "Senna", "practitioners": ["Llaila Afrika"]}, {"name": "Senna Leaves", "practitioners": ["Llaila Afrika"]}, {"name": "Sheep Sorrel", "practitioners": ["Rene Caisse"]}, {"name": "Shepherd's Purse", "practitioners": ["Llaila Afrika"]}, {"name": "Shiitake Mushroom", "practitioners": ["Robert Morse"]}, {"name": "Siberian Ginseng", "practitioners": ["Robert Morse"]}, {"name": "Siberian Ginseng Root", "practitioners": ["Robert Morse"]}, {"name": "Skullcap", "practitioners": ["Llaila Afrika"]}, {"name": "Skunk Cabbage", "practitioners": ["Llaila Afrika"]}, {"name": "Slippery Elm", "practitioners": ["Llaila Afrika", "Robert Morse"]}, {"name": "Slippery Elm (sore nipples)", "practitioners": ["Llaila Afrika"]}, {"name": "Slippery Elm Bark", "practitioners": ["Rene Caisse"]}, {"name": "Solomon's Seal", "practitioners": ["Llaila Afrika"]}, {"name": "Sorrel", "practitioners": ["Llaila Afrika"]}, {"name": "Spearmint", "practitioners": ["Llaila Afrika"]}, {"name": "Spikenard", "practitioners": ["Llaila Afrika"]}, {"name": "Squaw Vine", "practitioners": ["Llaila Afrika"]}, {"name": "St. John's Root", "practitioners": ["Llaila Afrika"]}, {"name": "St. John's Wort", "practitioners": ["Llaila Afrika"]}, {"name": "Stinging Nettle", "practitioners": ["Llaila Afrika"]}, {"name": "Strawberry", "practitioners": ["Llaila Afrika"]}, {"name": "Sweet Balm", "practitioners": ["Llaila Afrika"]}, {"name": "Tansy", "practitioners": ["Llaila Afrika"]}, {"name": "Thuja", "practitioners": ["Llaila Afrika"]}, {"name": "Thyme", "practitioners": ["Llaila Afrika"]}, {"name": "Tormentil", "practitioners": ["Llaila Afrika"]}, {"name": "Turkey Corn", "practitioners": ["Llaila Afrika"]}, {"name": "Turkey Rhubarb Root", "practitioners": ["Rene Caisse"]}, {"name": "Twin Leaf", "practitioners": ["Llaila Afrika"]}, {"name": "Uva Ursi", "practitioners": ["Llaila Afrika"]}, {"name": "Valerian", "practitioners": ["Llaila Afrika"]}, {"name": "Vervain", "practitioners": ["Llaila Afrika"]}, {"name": "Wahoo", "practitioners": ["Llaila Afrika"]}, {"name": "White Clover", "practitioners": ["Llaila Afrika"]}, {"name": "White Oak Bark", "practitioners": ["Llaila Afrika", "Robert Morse"]}, {"name": "White Pine", "practitioners": ["Llaila Afrika"]}, {"name": "Wild Alum Root", "practitioners": ["Llaila Afrika"]}, {"name": "Wild Cherry", "practitioners": ["Llaila Afrika"]}, {"name": "Wild Yam", "practitioners": ["Llaila Afrika"]}, {"name": "Willow", "practitioners": ["Llaila Afrika"]}, {"name": "Wintergreen", "practitioners": ["Llaila Afrika"]}, {"name": "Witch Hazel", "practitioners": ["Llaila Afrika", "Robert Morse"]}, {"name": "Wood Betony", "practitioners": ["Llaila Afrika"]}, {"name": "Wood Sage", "practitioners": ["Llaila Afrika"]}, {"name": "Wood Sanicle", "practitioners": ["Llaila Afrika"]}, {"name": "Wormwood", "practitioners": ["Llaila Afrika"]}, {"name": "Yarrow", "practitioners": ["Llaila Afrika"]}, {"name": "Yellow Dock", "practitioners": ["Llaila Afrika", "Robert Morse"]}, {"name": "Yerba Santa", "practitioners": ["Llaila Afrika"]}, {"name": "Yohimbe", "practitioners": ["Llaila Afrika"]}], "daily_dozen": [{"id": "beans", "label": "Beans (legumes)", "servings_per_day": "verify vs. official Daily Dozen app/graphic - not cleanly extractable from this file's checklist graphic"}, {"id": "berries", "label": "Berries", "servings_per_day": "verify"}, {"id": "other_fruits", "label": "Other Fruits", "servings_per_day": "verify"}, {"id": "cruciferous_vegetables", "label": "Cruciferous Vegetables", "servings_per_day": "verify"}, {"id": "greens", "label": "Greens", "servings_per_day": "verify"}, {"id": "other_vegetables", "label": "Other Vegetables", "servings_per_day": "verify"}, {"id": "flaxseeds", "label": "Flaxseeds (ground)", "servings_per_day": "verify"}, {"id": "nuts_seeds", "label": "Nuts and Seeds", "servings_per_day": "verify"}, {"id": "herbs_spices", "label": "Herbs and Spices", "servings_per_day": "verify"}, {"id": "whole_grains", "label": "Whole Grains", "servings_per_day": "verify"}, {"id": "beverages", "label": "Beverages (primarily water)", "servings_per_day": "verify"}, {"id": "exercise", "label": "Exercise", "servings_per_day": "verify"}]};
+
+const bodySystems = [...new Set(DATA.conditions.map(c => c.body_system))].sort();
+let activeFilter = null;
+let searchTerm = "";
+
+function renderFilters(){
+  const wrap = document.getElementById('filterChips');
+  wrap.innerHTML = '<button class="filter-chip' + (activeFilter===null?' active':'') + '" data-f="">All Systems</button>' +
+    bodySystems.map((bs, i) => `<button class="filter-chip rainbow-${i % 8}${activeFilter===bs?' active':''}" data-f="${bs}">${bs}</button>`).join('');
+  wrap.querySelectorAll('.filter-chip').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      activeFilter = btn.dataset.f || null;
+      renderFilters();
+      renderResults();
+    });
+  });
+}
+
+function matches(cond, term){
+  if(!term) return true;
+  const t = term.toLowerCase();
+  if(cond.name.toLowerCase().includes(t)) return true;
+  if(cond.body_system.toLowerCase().includes(t)) return true;
+  return cond.entries.some(e => (e.summary||'').toLowerCase().includes(t) || (e.practitioner||'').toLowerCase().includes(t));
+}
+
+function renderResults(){
+  const list = DATA.conditions.filter(c =>
+    (activeFilter ? c.body_system === activeFilter : true) && matches(c, searchTerm)
+  );
+  document.getElementById('countLine').textContent = `${list.length} specimen${list.length===1?'':'s'} indexed`;
+
+  const container = document.getElementById('results');
+  if(list.length === 0){
+    container.innerHTML = '<div class="empty">Nothing matches that search.<br>Try a body system or a broader term.</div>';
+    return;
+  }
+
+  container.innerHTML = list.map((c, i) => {
+    const entries = c.entries.map(e => `
+      <div class="entry ${e.layer}">
+        <div class="entry-label">
+          <span class="layer-tag">${e.layer === 'science' ? 'Science' : 'Practitioner'}</span>
+          <span>${e.practitioner}</span>
+        </div>
+        <div class="entry-text">${e.summary}</div>
+        ${e.caution ? `<div class="entry-caution">⚠ ${e.caution}</div>` : ''}
+        ${e.anecdotal ? `<div class="entry-anecdotal">personal case account, not a study</div>` : ''}
+      </div>
+    `).join('');
+
+    const bsIndex = bodySystems.indexOf(c.body_system) % 8;
+  return `
+      <div class="card" id="card-${i}">
+        <div class="card-head" onclick="document.getElementById('card-${i}').classList.toggle('open')">
+          <div>
+            <div class="card-title">${c.name}</div>
+            <div class="specimen-label rainbow-${bsIndex}" style="color:var(--chip)">${c.body_system} · ${c.entries.length} source${c.entries.length===1?'':'s'}</div>
+          </div>
+          <div class="chevron">›</div>
+        </div>
+        <div class="card-body">${entries}</div>
+      </div>
+    `;
+  }).join('');
+}
+
+function renderPhilosophies(){
+  document.getElementById('philosophies').innerHTML = DATA.philosophies.map(p => `
+    <div class="philosophy-card">
+      <div class="philosophy-practitioner">${p.practitioner}</div>
+      <div class="philosophy-name">${p.name}</div>
+      <div class="philosophy-summary">${p.summary}</div>
+    </div>
+  `).join('');
+}
+
+document.getElementById('searchInput').addEventListener('input', (e)=>{
+  searchTerm = e.target.value;
+  renderResults();
+});
+
+renderFilters();
+renderResults();
+renderPhilosophies();
+</script>
+</body>
+</html>

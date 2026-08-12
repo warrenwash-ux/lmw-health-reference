@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Human Body Foundations — LMW Academy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#FFFCF0; --panel:#FFFFFF; --panel-2:#FFF4D6;
+    --ink:#17233A; --dim:#6B7385;
+    --science:#00A99D; --science-bg:#D3F5F0;
+    --trad:#FF8A1E; --trad-bg:#FFE7C7;
+    --gold:#E8B400; --gold-bg:#FBF0C0;
+    --line:#EFE6C8;
+    --correct:#4CAF50; --correct-bg:#DBF2DC;
+    --wrong:#E4483B; --wrong-bg:#FDE1DE;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0; background:var(--bg); color:var(--ink); font-family:'Inter',sans-serif; line-height:1.6;}
+  h1,h2,h3{font-family:'Fraunces',serif; font-weight:600; margin:0;}
+  .wrap{max-width:720px; margin:0 auto; padding:0 1.25rem 3rem;}
+
+  header{padding:1.8rem 0 0.5rem; text-align:center;}
+  .eyebrow{font-family:'IBM Plex Mono',monospace; font-size:0.68rem; letter-spacing:0.14em; text-transform:uppercase; color:var(--science);}
+  header h1{font-size:clamp(1.5rem,6vw,2rem); margin-top:0.3rem;}
+  header p{color:var(--dim); font-size:0.9rem; max-width:48ch; margin:0.5rem auto 0;}
+
+  .progress-bar-outer{
+    background:var(--panel-2); border-radius:20px; height:10px; margin:1.2rem 0 0.4rem; overflow:hidden;
+  }
+  .progress-bar-inner{background:linear-gradient(90deg,var(--science),var(--gold)); height:100%; border-radius:20px; transition:width .3s ease;}
+  .progress-label{text-align:center; font-family:'IBM Plex Mono',monospace; font-size:0.72rem; color:var(--dim); margin-bottom:1rem;}
+
+  /* Lesson list view */
+  .lesson-row{
+    display:flex; align-items:center; gap:0.9rem; background:var(--panel); border:2px solid var(--line);
+    border-radius:12px; padding:0.9rem 1.1rem; margin-bottom:0.7rem; cursor:pointer;
+    box-shadow:0 2px 10px rgba(23,35,58,0.04); transition:box-shadow .15s, border-color .15s;
+  }
+  .lesson-row:hover{box-shadow:0 4px 16px rgba(23,35,58,0.09); border-color:var(--science-bg);}
+  .lesson-num{
+    flex-shrink:0; width:38px; height:38px; border-radius:50%; display:flex; align-items:center; justify-content:center;
+    font-family:'IBM Plex Mono',monospace; font-weight:600; font-size:0.9rem; background:var(--panel-2); color:var(--dim);
+  }
+  .lesson-row.done .lesson-num{background:var(--correct); color:#fff;}
+  .lesson-info{flex:1;}
+  .lesson-unit{font-family:'IBM Plex Mono',monospace; font-size:0.64rem; letter-spacing:0.05em; text-transform:uppercase; color:var(--trad);}
+  .lesson-title{font-family:'Fraunces',serif; font-size:1.05rem; margin-top:0.1rem;}
+  .lesson-summary{font-size:0.82rem; color:var(--dim); margin-top:0.15rem;}
+  .lesson-check{font-size:1.3rem; color:var(--correct); flex-shrink:0;}
+  .lesson-arrow{color:var(--dim); flex-shrink:0;}
+
+  /* Lesson detail view */
+  .lesson-view{display:none;}
+  .lesson-view.active{display:block;}
+  #lesson-list.hidden{display:none;}
+
+  .back-btn{
+    display:inline-flex; align-items:center; gap:0.3rem; background:none; border:none; color:var(--dim);
+    font-family:'IBM Plex Mono',monospace; font-size:0.78rem; cursor:pointer; padding:0.5rem 0; margin-bottom:0.8rem;
+  }
+  .back-btn:hover{color:var(--trad);}
+
+  .lesson-card{background:var(--panel); border:2px solid var(--line); border-radius:14px; padding:1.4rem 1.5rem; box-shadow:0 2px 14px rgba(23,35,58,0.05);}
+  .lv-unit{font-family:'IBM Plex Mono',monospace; font-size:0.68rem; letter-spacing:0.08em; text-transform:uppercase; color:var(--trad); background:var(--trad-bg); padding:0.2rem 0.6rem; border-radius:20px; display:inline-block;}
+  .lv-title{font-size:1.5rem; margin-top:0.7rem;}
+  .lv-content p{font-size:0.95rem; margin:0.8rem 0;}
+  .lv-content b{color:var(--science);}
+
+  .quiz-section{margin-top:1.8rem; padding-top:1.5rem; border-top:2px dashed var(--line);}
+  .quiz-title{font-family:'IBM Plex Mono',monospace; font-size:0.75rem; letter-spacing:0.05em; text-transform:uppercase; color:var(--gold); margin-bottom:1rem;}
+  .quiz-q{margin-bottom:1.3rem;}
+  .quiz-q-text{font-family:'Fraunces',serif; font-size:1rem; margin-bottom:0.6rem;}
+  .quiz-option{
+    display:block; width:100%; text-align:left; background:var(--panel-2); border:2px solid var(--line);
+    border-radius:8px; padding:0.65rem 0.9rem; margin-bottom:0.45rem; cursor:pointer; font-size:0.88rem;
+    color:var(--ink); font-family:'Inter',sans-serif; transition:all .12s ease;
+  }
+  .quiz-option:hover{border-color:var(--science);}
+  .quiz-option.selected-correct{background:var(--correct-bg); border-color:var(--correct); color:#2C6B2F;}
+  .quiz-option.selected-wrong{background:var(--wrong-bg); border-color:var(--wrong); color:#8C2E26;}
+  .quiz-option.reveal-correct{background:var(--correct-bg); border-color:var(--correct);}
+  .quiz-option[disabled]{cursor:default;}
+
+  .complete-btn{
+    display:block; width:100%; margin-top:1.2rem; padding:0.9rem; border:none; border-radius:10px;
+    background:var(--science); color:#fff; font-family:'IBM Plex Mono',monospace; font-size:0.85rem;
+    letter-spacing:0.04em; text-transform:uppercase; cursor:pointer; font-weight:600;
+  }
+  .complete-btn:disabled{background:var(--line); color:var(--dim); cursor:not-allowed;}
+  .complete-btn.done{background:var(--correct);}
+
+  .xp-toast{
+    position:fixed; bottom:1.2rem; left:50%; transform:translateX(-50%) translateY(100px); opacity:0;
+    background:var(--ink); color:#fff; padding:0.7rem 1.3rem; border-radius:30px; font-family:'IBM Plex Mono',monospace;
+    font-size:0.85rem; transition:all .3s ease; z-index:20;
+  }
+  .xp-toast.show{transform:translateX(-50%) translateY(0); opacity:1;}
+
+  footer{text-align:center; padding:2rem 0 1rem; color:var(--dim); font-family:'IBM Plex Mono',monospace; font-size:0.65rem;}
+
+  .lib-nav{display:flex;gap:0.4rem;justify-content:center;flex-wrap:wrap;margin:0.9rem 0 0;font-family:'IBM Plex Mono',monospace;font-size:0.66rem;}
+  .lib-nav a{color:var(--dim);text-decoration:none;padding:0.3rem 0.6rem;border:1px solid var(--line);border-radius:20px;white-space:nowrap;}
+  .lib-nav a:hover{border-color:var(--trad);color:var(--trad);}
+  .lib-nav a.current{background:var(--panel-2);color:var(--ink);font-weight:600;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="eyebrow">LMW Academy · Personal Course</div>
+  <h1 id="course-title">Human Body Foundations</h1>
+  <p id="course-subtitle"></p>
+  <div class="progress-bar-outer"><div class="progress-bar-inner" id="progress-bar" style="width:0%"></div></div>
+  <div class="progress-label" id="progress-label">0 of 11 lessons complete</div>
+  <nav class="lib-nav">
+    <a href="human_body_foundations.html" class="current">📖 Course</a>
+    <a href="lmw_health_reference.html">🔍 Field Compendium</a>
+    <a href="lmw_body_systems_guide.html">🫀 Body Systems Guide</a>
+    <a href="lmw_protocol_manual.html">🧪 Protocol Manual</a>
+  </nav>
+</header>
+
+<div id="lesson-list"></div>
+
+<div id="lesson-view" class="lesson-view">
+  <button class="back-btn" onclick="showList()">‹ back to lessons</button>
+  <div class="lesson-card">
+    <span class="lv-unit" id="lv-unit"></span>
+    <h2 class="lv-title" id="lv-title"></h2>
+    <div class="lv-content" id="lv-content"></div>
+
+    <div class="quiz-section">
+      <div class="quiz-title">Check your understanding</div>
+      <div id="quiz-container"></div>
+      <button class="complete-btn" id="complete-btn" disabled onclick="markComplete()">Answer all questions to continue</button>
+    </div>
+  </div>
+</div>
+
+<div class="xp-toast" id="xp-toast">+10 XP · Lesson complete</div>
+
+<footer>Human Body Foundations · LMW Academy · progress saved in this browser</footer>
+</div>
+
+<script>
+const COURSE = {"course_title": "Human Body Foundations", "course_subtitle": "The theory track: chemistry through materia medica, built to actually understand your health library instead of just reading it.", "lessons": [{"id": 1, "title": "The Cell", "unit": "Biology", "summary": "Every organ is trillions of these doing a specialized job together.", "content": ["Everything in your body \u2014 organs, blood, nerves, skin \u2014 is made of cells. A cell is a tiny bag of water and chemicals, wrapped in a membrane (like a soap bubble made of fat), that keeps itself alive by constantly moving things in and out.", "**The membrane** controls what gets in and out. This is why \"absorption\" is such a big deal in herbalism \u2014 an herb's compound has to cross this membrane to do anything at all.", "**The mitochondria** is the cell's power plant. It burns sugar and oxygen to make energy (ATP). Nearly every \"detox\" or \"energy\" claim traces back to this one structure working better or worse.", "**The nucleus** holds the DNA, the instruction manual. This is why \"genetic weakness\" is a real, legitimate concept \u2014 some people's instruction manuals run certain organs less efficiently from birth."], "quiz": [{"q": "What controls what enters and exits a cell?", "options": ["The nucleus", "The membrane", "The mitochondria", "The DNA"], "answer": 1}, {"q": "What does the mitochondria produce?", "options": ["DNA", "Fiber", "ATP (energy)", "Enzymes"], "answer": 2}, {"q": "Where is a cell's DNA stored?", "options": ["The membrane", "The mitochondria", "The nucleus", "The cytoplasm"], "answer": 2}]}, {"id": 2, "title": "Atoms, Bonds, and pH", "unit": "Chemistry", "summary": "Chemistry is the study of how electrons interact between atoms.", "content": ["An atom has a nucleus (protons + neutrons) with electrons orbiting around it. Chemistry is the study of how electrons interact between atoms.", "**Ionic bonds**: one atom steals an electron from another, creating charged particles called ions (sodium, potassium \u2014 critical for every nerve signal in your body). **Covalent bonds**: atoms share electrons instead. Most of your body's molecules are built this way.", "pH measures free hydrogen ions (H+) in a liquid. More H+ = acidic = lower number. Fewer H+ = alkaline = higher number. Scale runs 0\u201314, with 7 neutral.", "Your blood pH is tightly held between 7.35\u20137.45 (homeostasis) \u2014 it will not drift from diet the way popular alkaline-diet claims suggest. What actually happens: your kidneys and lungs work harder to buffer and excrete acid load from acid-forming food. It doesn't poison your blood \u2014 it adds workload to kidneys and mineral reserves (like bone calcium) over years.", "Translation for your books: \"alkalize the body\" really means *reduce the workload on kidneys and mineral reserves*, not *change blood chemistry directly*."], "quiz": [{"q": "A lower pH number means a liquid is more:", "options": ["Alkaline", "Acidic", "Neutral", "Ionic"], "answer": 1}, {"q": "Your blood pH is tightly held between:", "options": ["1-3", "5-6", "7.35-7.45", "10-12"], "answer": 2}, {"q": "Eating acid-forming food mainly affects your body by:", "options": ["Directly changing blood pH", "Adding workload to kidneys/mineral reserves", "Having no effect at all", "Instantly causing disease"], "answer": 1}]}, {"id": 3, "title": "Organic Chemistry \u2014 Carbon", "unit": "Chemistry", "summary": "Carbon's 4-bond property builds every molecule in living things.", "content": ["Carbon can form 4 bonds at once with other atoms, including other carbons \u2014 letting carbon chain into rings, branches, and long strands. \"Organic chemistry\" is the chemistry of carbon-based molecules.", "**Carbohydrates**: chains of sugar. Fiber is a sugar chain your body can't break apart \u2014 that's why it bulks stool instead of being absorbed as energy.", "**Lipids (fats)**: long, water-repelling carbon chains. Cell membranes are built from a double layer of fat \u2014 this is why fat-soluble vitamins (A,D,E,K) and many herb compounds need fat in your diet to absorb at all.", "**Proteins**: chains of 20 kinds of amino acids, folded into 3D shapes. Shape determines function \u2014 an enzyme, antibody, and muscle fiber are all proteins, just folded differently.", "**Nucleic acids (DNA/RNA)**: the instruction manual, a sequence of 4 chemical letters. Every protein is built from a DNA instruction."], "quiz": [{"q": "What makes carbon special for building life's molecules?", "options": ["It's the lightest atom", "It can form 4 bonds at once", "It's always liquid", "It has no electrons"], "answer": 1}, {"q": "Why can't your body absorb fiber as energy?", "options": ["It's toxic", "It's a sugar chain your body can't break apart", "It has no carbon", "It's a protein"], "answer": 1}, {"q": "What determines a protein's function?", "options": ["Its color", "Its 3D folded shape", "Its taste", "Its temperature"], "answer": 1}]}, {"id": 4, "title": "Biochemistry \u2014 How Cells Make Energy", "unit": "Chemistry", "summary": "ATP is your cells' energy cash \u2014 and 'detox' is real, measurable liver enzyme chemistry.", "content": ["Cells convert food into a universal energy \"cash\" molecule: ATP. Food is the paycheck, ATP is cash in your wallet.", "Digestion breaks food into glucose, fatty acids, amino acids. Those enter cells and break down further (glycolysis, then the Krebs cycle), stripping off electrons. Electrons go to the mitochondria, which use them plus oxygen to generate ATP \u2014 this is why you breathe.", "Without enough oxygen, cells make a little ATP via fermentation, producing lactic acid \u2014 the real chemistry behind the burn during hard exercise.", "**\"Cancer cells are anaerobic\"**: a real, documented phenomenon (the Warburg effect) \u2014 many cancer cells rely more on fermentation even with oxygen present. Scientists still debate whether it's a *cause* of cancer or just something cancer cells do once already cancerous.", "**\"Detox\"**: mostly means your liver's two-phase enzyme system chemically modifying fat-soluble waste so kidneys can filter it out, or the liver can dump it into bile. Measurable enzyme chemistry, happening every hour, not just during a cleanse.", "**Enzymes**: folded proteins shaped like a lock that only a specific molecule (the key) fits, speeding up one exact reaction thousands of times faster."], "quiz": [{"q": "What is ATP?", "options": ["A vitamin", "The cell's energy 'cash' molecule", "A type of bacteria", "A hormone"], "answer": 1}, {"q": "What do mitochondria need, along with electrons, to make ATP efficiently?", "options": ["Oxygen", "Sugar only", "Water only", "Sunlight"], "answer": 0}, {"q": "'Detox' at the biochemical level mostly refers to:", "options": ["A mystical process", "The liver's enzyme system modifying waste for removal", "Sweating only", "Nothing measurable"], "answer": 1}]}, {"id": 5, "title": "Physics Basics", "unit": "Physics", "summary": "Pressure, electricity, and leverage explain almost everything mechanical in your body.", "content": ["**Pressure**: fluids flow from high pressure to low pressure, always. Blood pressure is the force of blood against artery walls (systolic = contraction, diastolic = relaxation). Herbs that 'lower blood pressure' either widen vessels (less pressure for same volume) or reduce fluid volume (diuretics).", "**Lymph has no pump.** Blood has the heart. Lymph only moves via muscle contraction, breathing, and gravity squeezing the vessels as you move. This is mechanically real \u2014 sitting still all day genuinely slows lymph flow, which is why rebounding/movement-based lymph protocols have a real physical basis.", "**Electricity**: a nerve cell holds a tiny electrical charge across its membrane from unevenly distributed ions (sodium, potassium). A signal is that charge flipping in a traveling wave \u2014 an action potential, about 1/10 volt, moving down a living wire. This is why minerals matter directly for nerve/muscle function \u2014 they're literally the charged particles signals are made of.", "**Leverage**: every joint is a lever. Muscles contract (pull, never push) across a joint (the pivot), moving the bone like a lever arm. This is the physical basis of chiropractic work \u2014 adjusting alignment of a stack of levers/pivots so force transmits evenly."], "quiz": [{"q": "Fluids always flow from:", "options": ["Low pressure to high", "High pressure to low", "Cold to hot", "Left to right"], "answer": 1}, {"q": "What moves lymph fluid, since it has no pump?", "options": ["The heart", "Muscle contraction, breathing, gravity", "Nothing, it's always still", "Blood pressure"], "answer": 1}, {"q": "A muscle can only ______ across a joint, never push.", "options": ["Pull (contract)", "Vibrate", "Expand", "Rotate freely"], "answer": 0}]}, {"id": 6, "title": "Anatomy \u2014 The Map", "unit": "Anatomy & Physiology", "summary": "Structure: what's where. Ten systems, top to bottom.", "content": ["**Skeletal**: 206 bones, living tissue that makes blood cells and stores minerals \u2014 a mineral bank the body draws from.", "**Muscular**: skeletal (voluntary), smooth (involuntary \u2014 gut/vessel lining, creates peristalsis), cardiac (heart, never stops).", "**Nervous**: Central (brain+spinal cord) and Peripheral (branching nerves), which splits into voluntary and autonomic. Autonomic splits into sympathetic (fight-or-flight, speeds things up) and parasympathetic (rest-and-digest, when repair actually happens). Chronic sympathetic activation genuinely suppresses digestion and immune function.", "**Circulatory**: heart (pump), arteries (away from heart), veins (back to heart), blood (red cells=oxygen, white cells=immunity, platelets=clotting).", "**Lymphatic**: pumpless drainage network, immune cells + waste clearance.", "**Digestive**: one tube, mouth to anus. Liver/gallbladder/pancreas dump products into the tube rather than being part of it.", "**Endocrine**: glands releasing hormones into blood. Thyroid (metabolism), adrenals (stress), pancreas (blood sugar), pituitary (master gland).", "**Respiratory**: nose/mouth to lungs, gas exchange at microscopic alveoli.", "**Renal**: kidneys (filter blood) to ureters to bladder to urethra.", "**Integumentary**: skin, hair, nails \u2014 largest organ, real elimination route via sweat."], "quiz": [{"q": "Which nervous system branch is active during 'rest and digest'?", "options": ["Sympathetic", "Parasympathetic", "Central", "Skeletal"], "answer": 1}, {"q": "Which organs dump products into the digestive tube rather than being part of it?", "options": ["Stomach and mouth", "Liver, gallbladder, pancreas", "Esophagus and rectum", "Small and large intestine"], "answer": 1}, {"q": "Bones store which of these, acting as a mineral bank?", "options": ["Fat", "Water", "Calcium/minerals", "Sugar"], "answer": 2}]}, {"id": 7, "title": "Physiology \u2014 How It Works Together", "unit": "Anatomy & Physiology", "summary": "Function: digestion, hormones, immunity, and homeostasis \u2014 the thread connecting everything.", "content": ["**Digestion**: mouth (chewing + saliva enzyme) \u2192 esophagus (peristalsis) \u2192 stomach (acid + pepsin break down protein) \u2192 small intestine (pancreas enzymes + liver/gallbladder bile emulsify fat; nutrients absorb into blood) \u2192 large intestine (bacteria ferment fiber, water reabsorbed, waste concentrated into stool).", "**Hormones**: chemical messages released into blood, acting slowly (minutes to days) body-wide, but only on cells with the matching receptor. This is why thyroid hormone affects nearly your whole metabolism at once.", "**Immune response**: Innate (fast, general \u2014 inflammation, general immune cells) and Adaptive (slower, specific \u2014 cells that learn and remember one exact invader, the basis of vaccines/lasting immunity). Fever is a deliberate strategy \u2014 raising temperature slows pathogens and speeds immune cells, not a malfunction.", "**Homeostasis**: the goal underneath every system \u2014 keeping temperature, pH, blood sugar, hydration inside a narrow safe range, automatically. 'The body wants to heal itself' claims are really describing this real, documented principle \u2014 oversold only when implied to fix serious structural damage alone."], "quiz": [{"q": "What does bile do in digestion?", "options": ["Digests protein directly", "Emulsifies fat so it can be absorbed", "Kills bacteria in the stomach", "Produces stool"], "answer": 1}, {"q": "Adaptive immunity is characterized by:", "options": ["Being fast but general", "Learning and remembering a specific invader", "Only working in children", "Causing fever directly"], "answer": 1}, {"q": "Homeostasis refers to:", "options": ["A disease state", "The body keeping internal conditions in a narrow safe range", "A type of hormone", "Muscle contraction"], "answer": 1}]}, {"id": 8, "title": "Botany \u2014 Plant Structure", "unit": "Botany & Phytochemistry", "summary": "Plants can't run from threats \u2014 so they make chemical weapons instead. That's the origin of herbal medicine.", "content": ["Plants can't flee predators, so they evolved chemical weapons/signals instead: bitter compounds to deter animals, toxins against insects, antimicrobial compounds against fungus/bacteria, pigments to attract pollinators. Every defensive chemical is a candidate for a measurable effect in a human body too \u2014 this is the real origin story of herbal medicine.", "**Roots**: absorb water/minerals, store energy reserves and often defensive chemicals \u2014 why root is often the medicinal part (dandelion, burdock, turkey rhubarb).", "**Stems/bark**: structural support and plumbing; bark is the plant's 'skin,' carrying strong defensive chemicals (willow bark, slippery elm bark).", "**Leaves**: where photosynthesis happens and where chlorophyll lives.", "**Flowers**: reproductive, often scent/pigment compounds for pollinators (red clover, chamomile).", "**Seeds**: concentrated energy and protective chemicals to survive digestion intact (flaxseed, fenugreek).", "**Photosynthesis**: sunlight + water + CO2 \u2192 sugar, releasing oxygen. Chlorophyll's real, documented function is capturing light for the plant \u2014 a light-harvesting molecule, not automatically a universal human medicine. Its actual effects in the human body are a separate, testable question."], "quiz": [{"q": "Why do plants make defensive chemicals?", "options": ["For decoration", "Because they can't flee threats like animals can", "By accident", "To taste better"], "answer": 1}, {"q": "Which plant part often stores the most defensive/medicinal chemicals along with energy reserves?", "options": ["Flowers", "Roots", "Petals", "Pollen"], "answer": 1}, {"q": "Chlorophyll's documented, primary function is:", "options": ["Curing disease", "Capturing sunlight for the plant", "Killing bacteria", "Making seeds"], "answer": 1}]}, {"id": 9, "title": "Phytochemistry \u2014 Compounds That Cross Over", "unit": "Botany & Phytochemistry", "summary": "The actual chemical families in plants, and how each interacts with human cell chemistry.", "content": ["Now that you know why plants make chemicals (Lesson 8) and how carbon-based molecules work (Lessons 3-4), phytochemistry is just naming the specific families of plant compounds and how each interacts with your cells.", "**Alkaloids**: nitrogen-containing compounds, often bitter, often affect the nervous system directly since many mimic or block neurotransmitters (the chemical messengers between nerve cells). Examples: caffeine, morphine, nicotine. This family includes some of the most powerful \u2014 and most dangerous in the wrong dose \u2014 plant chemicals that exist. Potency here isn't folklore; alkaloids are literally why certain plants are used as both medicines and poisons depending on dose.", "**Flavonoids**: pigment compounds (often giving fruit/flowers their color) that act mainly as antioxidants \u2014 they donate electrons to neutralize unstable molecules called free radicals, which would otherwise damage cell membranes and DNA. This is the real chemistry behind most 'antioxidant' claims in your library (bilberry, hawthorn, milk thistle's silymarin) — see the full Hepatic entry in the <a href='lmw_body_systems_guide.html#sys-hepatic' target='_blank'>Body Systems Guide</a>.", "**Tannins**: compounds that bind to proteins, causing them to pucker/tighten \u2014 this is why tannin-heavy plants (witch hazel, white oak bark) are used as astringents for bleeding, diarrhea, or skin toning. The 'tightening' sensation is a literal, physical protein-binding effect, not just a feeling.", "**Glycosides**: a sugar molecule bonded to another active compound. The sugar often helps the compound absorb through the gut wall, then gets cleaved off once inside, releasing the active part. Many heart-affecting plant compounds (like in foxglove/digitalis) are glycosides — compare against the dosed Heart formula in the <a href='lmw_body_systems_guide.html#sys-cardiovascular' target='_blank'>Body Systems Guide</a> \u2014 again, powerful enough to be both medicine and poison by dose.", "**Essential oils/terpenes**: volatile (evaporate easily), aromatic compounds \u2014 responsible for a plant's smell, and often have antimicrobial or relaxant effects (lavender, peppermint, eucalyptus).", "**Why dose matters more than anything else here**: nearly every phytochemical family above works because it interacts with a specific human biochemical pathway \u2014 the same reason a small dose can heal and a large dose can harm. This is the single most important lesson from real pharmacology that folk herbal writing often skips entirely."], "quiz": [{"q": "Alkaloids often affect which system directly?", "options": ["Skeletal", "Nervous system", "Integumentary", "None"], "answer": 1}, {"q": "Flavonoids mainly act as:", "options": ["Structural fiber", "Antioxidants, neutralizing free radicals", "Sugars for energy", "Sedatives only"], "answer": 1}, {"q": "Why are tannins used for bleeding or diarrhea?", "options": ["They taste good", "They bind proteins, causing tissue to tighten", "They're sugars", "They lower body temperature"], "answer": 1}, {"q": "What determines whether a phytochemical heals or harms?", "options": ["The color of the plant", "Dose", "The season it was picked", "Nothing, it's random"], "answer": 1}]}, {"id": 10, "title": "Materia Medica \u2014 Reading Herbs With Real Understanding", "unit": "Applied Herbalism", "summary": "Now you can read any herb entry in your library and know *why*, not just *that*.", "content": ["Materia medica just means 'medical material' \u2014 the herb-by-herb reference every herbalist eventually builds. The difference between memorizing it and understanding it is everything you've learned so far.", "**Worked example \u2014 Dandelion** (appears across Jensen, Sebi, and Afrika's books for liver/digestive support \u2014 see it listed in the <a href='lmw_health_reference.html' target='_blank'>Field Compendium</a>): Dandelion root contains bitter compounds (a type of phytochemical) that stimulate bile flow from the liver/gallbladder (Lesson 7's digestion chain) and it's a natural diuretic, meaning it increases urine output, reducing fluid volume (Lesson 5's pressure principle) \u2014 which is the real mechanism behind 'dandelion supports the kidneys and liver.' It's not mystical; it's two specific, testable mechanisms.", "**Worked example \u2014 Milk Thistle** (appears in Calbom's <a href='lmw_body_systems_guide.html#sys-hepatic' target='_blank'>Hepatic protocol</a>): its active compound, silymarin, is a flavonoid (Lesson 9) \u2014 an antioxidant that appears to help protect liver cell membranes and may slow depletion of glutathione, a key detox molecule in Phase II liver metabolism (Lesson 4's biochemistry). This is one of the more well-researched herbs in your whole library \u2014 actual clinical studies exist, unlike most other entries.", "**Worked example \u2014 Cayenne pepper** (shows up in Morse's dosed <a href='lmw_body_systems_guide.html#sys-cardiovascular' target='_blank'>Circulation & Blood Pressure formula</a>): contains capsaicin, a compound that triggers heat/pain receptors, causing local blood vessels to dilate (Lesson 5's pressure/leverage) \u2014 the real mechanism behind 'improves circulation.' It's a real, measurable vasodilation effect, though the magnitude and duration matter more than the folk claim usually specifies.", "**How to read any new herb entry now**: ask 4 questions. (1) What plant part is used, and does that match where defensive/active chemicals concentrate (Lesson 8)? (2) What phytochemical family is the active compound in (Lesson 9)? (3) What specific physiological pathway does that chemical family interact with (Lesson 7)? (4) Is there an actual dose-response relationship documented, or is it a single traditional claim with no dose data? That fourth question is the one most alternative-health books skip \u2014 and it's the one real pharmacology never does. Try it yourself: open the <a href='lmw_protocol_manual.html#organ-formulas' target='_blank'>Protocol Manual's organ formulas</a> and ask those four questions of any herb listed there."], "quiz": [{"q": "Dandelion's effect on the liver/kidneys is attributed to:", "options": ["Magic", "Bitter compounds (bile stimulation) + diuretic action", "High sugar content", "Its color"], "answer": 1}, {"q": "Milk thistle's active compound, silymarin, belongs to which phytochemical family?", "options": ["Alkaloid", "Flavonoid", "Tannin", "Essential oil"], "answer": 1}, {"q": "Cayenne's 'improves circulation' effect is mechanically explained by:", "options": ["Capsaicin causing local vasodilation", "Its spicy taste alone", "Sugar content", "It has no real mechanism"], "answer": 0}, {"q": "The question most alternative-health books skip when describing an herb is:", "options": ["What color is it", "Is there a documented dose-response relationship", "What does it smell like", "Where does it grow"], "answer": 1}]}, {"id": 11, "title": "Diagnosis & Imaging \u2014 How Doctors Actually Assess You", "unit": "Applied Herbalism", "summary": "What's real evidence vs. inference \u2014 and where iridology and similar methods stand.", "content": ["Real diagnosis is built on evidence that can be independently verified by another trained observer, ideally against a known physical cause. That standard is worth understanding clearly, since it's exactly what separates the different tools available.", "**Physical exam**: listening to heart/lungs (auscultation), feeling organs/lymph nodes (palpation), reflexes, range of motion. Low-tech but genuinely evidence-based \u2014 trained practitioners can reliably detect real physical signs this way.", "**Blood work**: measures actual concentrations of specific molecules (glucose, cholesterol, liver enzymes, hormones) against population reference ranges. This is as close to 'ground truth' as routine diagnosis gets, because it's measuring an actual chemical quantity, not inferring one.", "**Imaging** \u2014 X-ray (bone/dense tissue, uses radiation passing through the body), ultrasound (soft tissue, uses sound wave echoes, no radiation), MRI (very detailed soft tissue, uses magnetic fields), CT scan (cross-sectional X-ray images). Each shows an actual physical structure, verifiable by any trained radiologist looking at the same image.", "**Where iridology and similar methods stand**: the honest answer is that the core premise \u2014 a fixed, detailed map correlating exact iris zones to exact organs \u2014 has not been demonstrated in controlled studies where practitioners couldn't see the patient's health history. That doesn't mean nothing about the eye is medically relevant (real eye signs do exist \u2014 jaundice showing in the eyes from liver disease is genuine, for instance) \u2014 it means the *specific, detailed mapping system* isn't independently verified the way blood work or imaging is.", "**The real lesson**: it's not that traditional/practitioner methods are worthless \u2014 many contain genuine, mechanistically explainable insight, which is exactly what Lessons 1-10 equipped you to evaluate — including the <a href='lmw_protocol_manual.html#enemas' target='_blank'>Enema Guide</a> and cleanse protocols in the Protocol Manual. It's that 'independently verifiable against a known physical cause' is the actual bar diagnostic methods are measured against, and it's worth knowing which of your source books' methods clear that bar and which don't."], "quiz": [{"q": "What makes blood work close to 'ground truth' in diagnosis?", "options": ["It's cheap", "It measures actual chemical concentrations, not inferred signs", "It requires no lab", "It's always painless"], "answer": 1}, {"q": "What is the core issue with iridology as a diagnostic method?", "options": ["It requires expensive equipment", "The detailed organ-mapping premise hasn't been demonstrated in controlled studies", "It's too new to have been tested", "It only works on brown eyes"], "answer": 1}, {"q": "The 'bar' real diagnosis is measured against is:", "options": ["How old the method is", "Independent verifiability against a known physical cause", "How many people believe it", "How simple it is to learn"], "answer": 1}]}]};
+
+let progress = {};
+// Note: progress tracking here is in-memory for this session only.
+// For progress that persists across visits/devices, wire this to your
+// Supabase project the same way Bar Academy and App Academy track progress —
+// a simple `course_progress` table (user_id, lesson_id, completed_at) is all it needs.
+
+function saveProgress(){
+  // placeholder for Supabase write, e.g.:
+  // await supabase.from('course_progress').upsert({ lesson_id, user_id, completed: true });
+}
+
+document.getElementById('course-subtitle').textContent = COURSE.course_subtitle;
+
+let currentLesson = null;
+let currentAnswers = {};
+
+function renderList(){
+  const listEl = document.getElementById('lesson-list');
+  listEl.innerHTML = COURSE.lessons.map(l => {
+    const done = !!progress[l.id];
+    return `
+      <div class="lesson-row ${done ? 'done' : ''}" onclick="openLesson(${l.id})">
+        <div class="lesson-num">${done ? '✓' : l.id}</div>
+        <div class="lesson-info">
+          <div class="lesson-unit">${l.unit}</div>
+          <div class="lesson-title">${l.title}</div>
+          <div class="lesson-summary">${l.summary}</div>
+        </div>
+        <div class="lesson-arrow">›</div>
+      </div>
+    `;
+  }).join('');
+
+  const doneCount = Object.keys(progress).filter(k => progress[k]).length;
+  const pct = Math.round((doneCount / COURSE.lessons.length) * 100);
+  document.getElementById('progress-bar').style.width = pct + '%';
+  document.getElementById('progress-label').textContent = `${doneCount} of ${COURSE.lessons.length} lessons complete`;
+}
+
+function showList(){
+  document.getElementById('lesson-list').classList.remove('hidden');
+  document.getElementById('lesson-view').classList.remove('active');
+  renderList();
+}
+
+function openLesson(id){
+  currentLesson = COURSE.lessons.find(l => l.id === id);
+  currentAnswers = {};
+  document.getElementById('lesson-list').classList.add('hidden');
+  document.getElementById('lesson-view').classList.add('active');
+
+  document.getElementById('lv-unit').textContent = currentLesson.unit;
+  document.getElementById('lv-title').textContent = `${currentLesson.id}. ${currentLesson.title}`;
+  document.getElementById('lv-content').innerHTML = currentLesson.content.map(p => {
+    const formatted = p.replace(/\*\*(.+?)\*\*/g, '<b>$1</b>');
+    return `<p>${formatted}</p>`;
+  }).join('');
+
+  const quizEl = document.getElementById('quiz-container');
+  quizEl.innerHTML = currentLesson.quiz.map((q, qi) => `
+    <div class="quiz-q" data-qi="${qi}">
+      <div class="quiz-q-text">${qi+1}. ${q.q}</div>
+      ${q.options.map((opt, oi) => `<button class="quiz-option" onclick="answerQuiz(${qi}, ${oi})">${opt}</button>`).join('')}
+    </div>
+  `).join('');
+
+  const completeBtn = document.getElementById('complete-btn');
+  if(progress[id]){
+    completeBtn.textContent = '✓ Lesson complete';
+    completeBtn.classList.add('done');
+    completeBtn.disabled = false;
+  } else {
+    completeBtn.textContent = 'Answer all questions to continue';
+    completeBtn.classList.remove('done');
+    completeBtn.disabled = true;
+  }
+
+  window.scrollTo(0,0);
+}
+
+function answerQuiz(qi, oi){
+  if(currentAnswers[qi] !== undefined) return; // already answered
+  currentAnswers[qi] = oi;
+  const q = currentLesson.quiz[qi];
+  const qEl = document.querySelector(`.quiz-q[data-qi="${qi}"]`);
+  const options = qEl.querySelectorAll('.quiz-option');
+  options.forEach((btn, idx) => {
+    btn.disabled = true;
+    if(idx === oi && idx === q.answer) btn.classList.add('selected-correct');
+    else if(idx === oi && idx !== q.answer) btn.classList.add('selected-wrong');
+    else if(idx === q.answer) btn.classList.add('reveal-correct');
+  });
+
+  if(Object.keys(currentAnswers).length === currentLesson.quiz.length){
+    const completeBtn = document.getElementById('complete-btn');
+    if(!progress[currentLesson.id]){
+      completeBtn.disabled = false;
+      completeBtn.textContent = 'Mark lesson complete';
+    }
+  }
+}
+
+function markComplete(){
+  if(progress[currentLesson.id]) { showList(); return; }
+  progress[currentLesson.id] = true;
+  saveProgress();
+  const toast = document.getElementById('xp-toast');
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 1800);
+  const completeBtn = document.getElementById('complete-btn');
+  completeBtn.textContent = '✓ Lesson complete';
+  completeBtn.classList.add('done');
+  setTimeout(showList, 900);
+}
+
+renderList();
+</script>
+</body>
+</html>
